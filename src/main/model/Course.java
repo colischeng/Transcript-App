@@ -6,19 +6,16 @@ public class Course {
 
     private final String type;
     private final Integer code;
-    private final Integer yearTaken;
     private final Integer grade;
     private final Integer credits;
 
     public Course(String type,
                   Integer code,
-                  Integer yearTaken,
                   Integer grade,
                   Integer credits) {
 
         this.type = type;
         this.code = code;
-        this.yearTaken = yearTaken;
         this.grade = grade;
         this.credits = credits;
     }
@@ -31,11 +28,6 @@ public class Course {
     //EFFECTS: get a course's code
     public Integer getCode() {
         return code;
-    }
-
-    //EFFECTS: get a course's academic year
-    public Integer getYearTaken() {
-        return yearTaken;
     }
 
     //EFFECTS: get a course's grade

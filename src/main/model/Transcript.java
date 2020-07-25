@@ -33,7 +33,7 @@ public class Transcript {
     //REQUIRES: goal >= 0
     //MODIFIES:
     //EFFECTS: if target grade is achievable (no negative grades or grades above 100)
-    //         - return grade need in the next 3 credit courses to reach target
+    //         - return grade needed in the next 3 credit courses to reach target
     //         - otherwise, return -1
     public int target(int goal) {
         int sum = 0;
@@ -42,12 +42,13 @@ public class Transcript {
             sum += (c.getGrade() * c.getCredits());
             total += (100 * c.getCredits());
         }
-        int sofar = (((goal * (total + 300)) / 100) - sum) / 3;
-        if (0 <= sofar && sofar <= 100) {
-            return sofar;
+        int val = (((goal * (total + 300)) / 100) - sum) / 3;
+        if (0 <= val && val <= 100) {
+            return val;
         } else {
             return -1;
         }
+      
     }
 
     //REQUIRES: transcript is not empty
