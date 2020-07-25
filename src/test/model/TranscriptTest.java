@@ -62,10 +62,17 @@ class TranscriptTest {
 
     }
 
-
     @Test
     public void lengthTest(){
         assertEquals (6, testTranscript.length());
+    }
+
+    @Test
+    public void getCourseListTest(){
+        assertEquals(cpsc110,testTranscript.getCourseList().get(0));
+        assertEquals(cpsc221,testTranscript.getCourseList().get(1));
+        assertEquals(math221,testTranscript.getCourseList().get(2));
+        assertEquals(6,testTranscript.length());
     }
 
 

@@ -39,4 +39,12 @@ public class Course {
     }
 
 
+    public String toString() {
+        return "Type: " + getType() + " || "
+                + "Code: " + getCode() + " || "
+                + "Grade: " + getGrade() + " || "
+                + "Credits: " + getCredits();
+    }
+
+
 }

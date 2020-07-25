@@ -118,11 +118,7 @@ public class TranscriptApp {
     private void doPrint() {
         System.out.println("Your Transcript \n");
         for (Course c : transcript.getCourseList()) {
-            System.out.println(
-                    "Type: " + c.getType() + " || "
-                    + "Code: " + c.getCode() + " || "
-                    + "Grade: " + c.getGrade() + " || "
-                    + "Credits: " + c.getCredits());
+            System.out.println(c.toString());
         }
     }
 
