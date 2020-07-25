@@ -5,40 +5,40 @@ import java.util.List;
 
 public class Transcript {
 
-    private List<Course> transcript;
+    private final List<Course> courseList;
 
     public Transcript() {
-        transcript = new ArrayList<>();
+        courseList = new ArrayList<>();
     }
 
-    //MODIFIES: this
-    //EFFECTS: adds a course onto the transcript
+    // MODIFIES: this
+    // EFFECTS: adds a course onto the transcript
     public void addCourse(Course course) {
-        transcript.add(course);
+        courseList.add(course);
     }
 
-    //REQUIRES:
-    //MODIFIES:
-    //EFFECTS:  returns the cumulative GPA (weighted by credits) on the transcript so far
+    // REQUIRES:
+    // MODIFIES:
+    // EFFECTS:  returns the cumulative GPA (weighted by credits) on the transcript so far
     public int cumulativeGPA() {
         int sum = 0;
         int total = 0;
-        for (Course c : transcript) {
+        for (Course c : courseList) {
             sum += (c.getGrade() * c.getCredits());
             total += (100 * c.getCredits());
         }
         return (sum * 100) / total;
     }
 
-    //REQUIRES: goal >= 0
-    //MODIFIES:
-    //EFFECTS: if target grade is achievable (no negative grades or grades above 100)
+    // REQUIRES: goal >= 0
+    // MODIFIES:
+    // EFFECTS: if target grade is achievable (no negative grades or grades above 100)
     //         - return grade needed in the next 3 credit courses to reach target
     //         - otherwise, return -1
     public int target(int goal) {
         int sum = 0;
         int total = 0;
-        for (Course c : transcript) {
+        for (Course c : courseList) {
             sum += (c.getGrade() * c.getCredits());
             total += (100 * c.getCredits());
         }
@@ -51,26 +51,24 @@ public class Transcript {
       
     }
 
-    //REQUIRES: transcript is not empty
-    //MODIFIES: this
-    //EFFECTS: removes the last courses added onto transcript
+    // REQUIRES: transcript is not empty
+    // MODIFIES: this
+    // EFFECTS: removes the last courses added onto transcript
     public void removeCourse() {
-        int index = (transcript.size() - 1);
-        transcript.remove(index);
+        int index = (courseList.size() - 1);
+        courseList.remove(index);
     }
 
-    //MODIFIES: this
-    //EFFECTS: clear transcript of all course records
-    public void emptyTranscript() {
-        transcript.clear();
-    }
 
-    //MODIFIES:
-    //EFFECTS: return the number of courses on transcript
+    // MODIFIES:
+    // EFFECTS: return the number of courses on transcript
     public int length() {
-        return transcript.size();
+        return courseList.size();
     }
 
-
+    // EFFECTS: return the CourseListObject
+    public List<Course> getCourseList() {
+        return courseList;
+    }
 
 }

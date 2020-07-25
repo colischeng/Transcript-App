@@ -62,11 +62,6 @@ class TranscriptTest {
 
     }
 
-    @Test
-    public void emptyTranscriptTest(){
-        testTranscript.emptyTranscript();
-        assertEquals (0, testTranscript.length());
-    }
 
     @Test
     public void lengthTest(){

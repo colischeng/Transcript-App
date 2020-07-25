@@ -18,7 +18,7 @@ public class TranscriptApp {
     // EFFECTS: processes user input
     private void runTranscript() {   // taken from the runTeller method of the TellerApp
         boolean keepGoing = true;
-        String command = null;
+        String command;
         input = new Scanner(System.in);
         transcript = new Transcript();
 
@@ -44,6 +44,7 @@ public class TranscriptApp {
         System.out.println("\tc -> display cumulative GPA");
         System.out.println("\tt -> calculate target GPA");
         System.out.println("\tr -> remove last course");
+        System.out.println("\tp -> print transcript");
         System.out.println("\tq -> quit");
     }
 
@@ -58,6 +59,8 @@ public class TranscriptApp {
             doTarget();
         } else if (command.equals("r")) {
             doRemove();
+        } else if (command.equals("p")) {
+            doPrint();
         } else {
             System.out.println("Selection not valid...");
         }
@@ -76,7 +79,7 @@ public class TranscriptApp {
         int credit = input.nextInt();
         Course course = new Course(type, code, grade, credit);
         transcript.addCourse(course);
-        System.out.println(type + " " + code + "has been added to your transcript\n");
+        System.out.println(type + " " + code + " has been added to your transcript\n");
     }
 
     // EFFECTS: calculates cumulative GPA
@@ -110,4 +113,17 @@ public class TranscriptApp {
             System.out.println("No courses can be removed from an empty transcript");
         }
     }
+
+    // EFFECTS: print the entire transcript object
+    private void doPrint() {
+        System.out.println("Your Transcript \n");
+        for (Course c : transcript.getCourseList()) {
+            System.out.println(
+                    "Type: " + c.getType() + " || "
+                    + "Code: " + c.getCode() + " || "
+                    + "Grade: " + c.getGrade() + " || "
+                    + "Credits: " + c.getCredits());
+        }
+    }
+
 }
