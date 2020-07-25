@@ -1,6 +1,6 @@
 # GPA Calculator Project
 
-## Operations and Tracking of Matrices
+## Simple GPA Tracker and Calculator
 
 
 A project designed as an aid to students to track their cumulative GPA and well as

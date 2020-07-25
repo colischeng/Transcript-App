@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class testTranscript {
+class TranscriptTest {
     Course cpsc110;
     Course cpsc221;
     Course math221;
