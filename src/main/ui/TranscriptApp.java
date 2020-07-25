@@ -67,7 +67,7 @@ public class TranscriptApp {
     }
 
     // MODIFIES: this
-    // EFFECTS: creates a course
+    // EFFECTS: creates a course and adds it into the TranscriptApp
     private void doAdd() {
         System.out.println("\nWhat is the course type?");
         String type = input.next();
@@ -82,14 +82,14 @@ public class TranscriptApp {
         System.out.println(type + " " + code + " has been added to your transcript\n");
     }
 
-    // EFFECTS: calculates cumulative GPA
+    // EFFECTS: display cumulative GPA
     private void doCumulative() {
         System.out.println("Your cumulative GPA is " + transcript.cumulativeGPA());
 
     }
 
 
-    // EFFECTS: performs target calculation
+    // EFFECTS: displays target calculation
     private void doTarget() {
         System.out.println("\nWhat GPA do you want to achieve through your next 3-credit course?");
         int goal = input.nextInt();

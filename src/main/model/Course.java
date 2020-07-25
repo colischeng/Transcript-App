@@ -38,7 +38,7 @@ public class Course {
         return credits;
     }
 
-
+    //EFFECTS: create a printed line of info for a course object
     public String toString() {
         return "Type: " + getType() + " || "
                 + "Code: " + getCode() + " || "

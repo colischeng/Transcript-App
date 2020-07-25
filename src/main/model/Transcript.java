@@ -7,6 +7,7 @@ public class Transcript {
 
     private final List<Course> courseList;
 
+    // EFFECTS: construct new Transcript object
     public Transcript() {
         courseList = new ArrayList<>();
     }
@@ -17,8 +18,6 @@ public class Transcript {
         courseList.add(course);
     }
 
-    // REQUIRES:
-    // MODIFIES:
     // EFFECTS:  returns the cumulative GPA (weighted by credits) on the transcript so far
     public int cumulativeGPA() {
         int sum = 0;
@@ -30,8 +29,7 @@ public class Transcript {
         return (sum * 100) / total;
     }
 
-    // REQUIRES: goal >= 0
-    // MODIFIES:
+    // REQUIRES: 0 <= goal <= 100
     // EFFECTS: if target grade is achievable (no negative grades or grades above 100)
     //         - return grade needed in the next 3 credit courses to reach target
     //         - otherwise, return -1
@@ -48,7 +46,7 @@ public class Transcript {
         } else {
             return -1;
         }
-      
+
     }
 
     // REQUIRES: transcript is not empty
@@ -60,7 +58,6 @@ public class Transcript {
     }
 
 
-    // MODIFIES:
     // EFFECTS: return the number of courses on transcript
     public int length() {
         return courseList.size();
@@ -70,7 +67,6 @@ public class Transcript {
     public List<Course> getCourseList() {
         return courseList;
     }
-
 
 
 }
