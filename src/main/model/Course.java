@@ -7,6 +7,7 @@ public class Course {
     private final Integer grade;
     private final Integer credits;
 
+    // EFFECTS: construct new Course object
     public Course(String type,
                   Integer code,
                   Integer grade,

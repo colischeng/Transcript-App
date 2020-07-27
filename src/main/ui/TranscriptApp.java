@@ -38,7 +38,7 @@ public class TranscriptApp {
     }
 
     // EFFECTS: displays menu of options to user
-    private void displayMenu() {
+    private void displayMenu() {   // similarly adapted from the TellerApp
         System.out.println("\nSelect from:");
         System.out.println("\ta -> add a course");
         System.out.println("\tc -> display cumulative GPA");
@@ -51,7 +51,7 @@ public class TranscriptApp {
     // MODIFIES: this
     // EFFECTS: processes user command
     private void processCommand(String command) {
-        if (command.equals("a")) {
+        if (command.equals("a")) { // similarly adapted from the TellerApp
             doAdd();
         } else if (command.equals("c")) {
             doCumulative();

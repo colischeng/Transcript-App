@@ -3,8 +3,8 @@
 ## Simple GPA Tracker and Calculator
 
 
-A project designed as an aid to students to track their cumulative GPA and well as
-perform calculations that can help with future course planning. I thought this would be an interest project to undergo as the Grade Summary page on UBC's
+A project designed as an aid to students to track their cumulative GPA and perform calculations that can help with 
+future course planning. I thought this would be an interest project to undergo as the Grade Summary page on UBC's
 student services centre misses many features.
 
 
