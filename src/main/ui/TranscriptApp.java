@@ -5,6 +5,8 @@ import model.Transcript;
 
 import java.util.Scanner;
 
+// Represents the instantiated transcript app class
+
 public class TranscriptApp {
     private Transcript transcript;
     private Scanner input;

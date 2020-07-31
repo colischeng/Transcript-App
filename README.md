@@ -14,3 +14,5 @@ student services centre misses many features.
 - As a user, I want to be able to calculate the cumulative GPA on my transcript
 - As a user, I want to be able to determine the grade in my next 3-credit course to achieve a target GPA
 - As a user, I want to be able to print my entire transcript
+- As a user, I want to be able to save my transcript to file
+- As a user, I want to be able to reload my transcript and resume exactly from where I left off

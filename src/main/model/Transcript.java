@@ -3,6 +3,8 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 
+// Represents the list of courses that have been added to the transcript
+
 public class Transcript {
 
     private final List<Course> courseList;

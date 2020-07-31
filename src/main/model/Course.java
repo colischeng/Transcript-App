@@ -1,5 +1,7 @@
 package model;
 
+//Items of interest that represent the classes taken
+
 public class Course {
 
     private final String type;
