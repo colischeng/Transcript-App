@@ -2,12 +2,21 @@ package ui;
 
 import model.Course;
 import model.Transcript;
+import persistence.Reader;
+import persistence.Saveable;
+import persistence.Writer;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.util.List;
 import java.util.Scanner;
 
 // Represents the instantiated transcript app class
 
 public class TranscriptApp {
+    private static final String COURSES_FILE = "./data/courses.txt";
     private Transcript transcript;
     private Scanner input;
 
@@ -39,6 +48,45 @@ public class TranscriptApp {
         System.out.println("\nGoodbye!");
     }
 
+    // MODIFIES: this
+    // EFFECTS: loads courses from COURSES_FILE, if that file exists;
+    // otherwise initializes transcript with empty transcript
+    private void loadCourses() {
+        try {
+            List<Course> courses = Reader.readCourses(new File(COURSES_FILE));
+            for (Course c : transcript.getCourseList()) {
+                transcript.addCourse(c);
+            }
+            transcript.addCourse(courses.get(0));
+        } catch (IOException e) {
+            init();
+        }
+    }
+
+    // EFFECTS: saves state of transcripts to COURSES_FILE
+    private void saveCourses() {
+        try {
+            Writer writer = new Writer(new File(COURSES_FILE));
+            for (Course c : transcript.getCourseList()) {
+                writer.write(c);
+            }
+            writer.close();
+            System.out.println("Courses saved to file " + COURSES_FILE);
+        } catch (FileNotFoundException e) {
+            System.out.println("Unable to save accounts to " + COURSES_FILE);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            // this is due to a programming error
+        }
+    }
+
+    // MODIFIES: this
+    // EFFECTS: initializes transcript
+    private void init() {
+        transcript = new Transcript();
+    }
+
+
     // EFFECTS: displays menu of options to user
     private void displayMenu() {   // similarly adapted from the TellerApp
         System.out.println("\nSelect from:");
@@ -46,6 +94,7 @@ public class TranscriptApp {
         System.out.println("\tc -> display cumulative GPA");
         System.out.println("\tt -> calculate target GPA");
         System.out.println("\tr -> remove last course");
+        System.out.println("\ts -> save current transcript to file");
         System.out.println("\tp -> print transcript");
         System.out.println("\tq -> quit");
     }
@@ -61,6 +110,8 @@ public class TranscriptApp {
             doTarget();
         } else if (command.equals("r")) {
             doRemove();
+        } else if (command.equals("s")) {
+            saveCourses();
         } else if (command.equals("p")) {
             doPrint();
         } else {

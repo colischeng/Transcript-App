@@ -2,24 +2,52 @@ package model;
 
 //Items of interest that represent the classes taken
 
-public class Course {
+import persistence.Reader;
+import persistence.Saveable;
 
-    private final String type;
-    private final Integer code;
-    private final Integer grade;
-    private final Integer credits;
+import java.io.PrintWriter;
+
+public class Course implements Saveable {
+    private static int nextCourseId = 0;  // tracks id of next course created
+    private int id;                       // course id
+    private final String type;            // department of course
+    private final Integer code;           // course number
+    private final Integer grade;          // grade received in course
+    private final Integer credits;        // number of credits teh course is worth
 
     // EFFECTS: construct new Course object
     public Course(String type,
                   Integer code,
                   Integer grade,
                   Integer credits) {
-
+        id = nextCourseId++;
         this.type = type;
         this.code = code;
         this.grade = grade;
         this.credits = credits;
     }
+
+    /*
+     * REQUIRES: name has a non-zero length; code, grade, and credits >= 0
+     * EFFECTS: constructs a course with id, name and balance;
+     * nextCourseId is the id of the next course to be constructed
+     * NOTE: this constructor is to be used only when constructing
+     * a course from data stored in file
+     */
+    public Course(int nextId,
+                  int id,
+                  String type,
+                  Integer code,
+                  Integer grade,
+                  Integer credits) {
+        nextCourseId = nextId;
+        this.id = id;
+        this.type = type;
+        this.code = code;
+        this.grade = grade;
+        this.credits = credits;
+    }
+
 
     //EFFECTS: get a course's type
     public String getType() {
@@ -50,4 +78,18 @@ public class Course {
     }
 
 
+    @Override
+    public void save(PrintWriter printWriter) {
+        printWriter.print(nextCourseId);
+        printWriter.print(Reader.DELIMITER);
+        printWriter.print(id);
+        printWriter.print(Reader.DELIMITER);
+        printWriter.print(type);
+        printWriter.print(Reader.DELIMITER);
+        printWriter.println(code);
+        printWriter.print(Reader.DELIMITER);
+        printWriter.println(grade);
+        printWriter.print(Reader.DELIMITER);
+        printWriter.println(credits);
+    }
 }
