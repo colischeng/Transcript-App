@@ -54,10 +54,16 @@ public class TranscriptApp {
     private void loadCourses() {
         try {
             List<Course> courses = Reader.readCourses(new File(COURSES_FILE));
-            for (Course c : transcript.getCourseList()) {
-                transcript.addCourse(c);
+            if (courses.size() == 0) {
+                System.out.println("No past transcript exists. No courses have been loaded.");
+            } else {
+                transcript.getCourseList().clear();
+                for (Course c : courses) {
+                    transcript.addCourse(c);
+                }
+                System.out.println("Courses loaded from " + COURSES_FILE + "\n");
+                doPrint();
             }
-            transcript.addCourse(courses.get(0));
         } catch (IOException e) {
             init();
         }
@@ -73,7 +79,7 @@ public class TranscriptApp {
             writer.close();
             System.out.println("Courses saved to file " + COURSES_FILE);
         } catch (FileNotFoundException e) {
-            System.out.println("Unable to save accounts to " + COURSES_FILE);
+            System.out.println("Unable to save transcript to " + COURSES_FILE);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
             // this is due to a programming error
@@ -95,6 +101,7 @@ public class TranscriptApp {
         System.out.println("\tt -> calculate target GPA");
         System.out.println("\tr -> remove last course");
         System.out.println("\ts -> save current transcript to file");
+        System.out.println("\tl -> load existing transcript on file");
         System.out.println("\tp -> print transcript");
         System.out.println("\tq -> quit");
     }
@@ -112,6 +119,8 @@ public class TranscriptApp {
             doRemove();
         } else if (command.equals("s")) {
             saveCourses();
+        } else if (command.equals("l")) {
+            loadCourses();
         } else if (command.equals("p")) {
             doPrint();
         } else {

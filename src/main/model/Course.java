@@ -77,7 +77,6 @@ public class Course implements Saveable {
                 + "Credits: " + getCredits();
     }
 
-
     @Override
     public void save(PrintWriter printWriter) {
         printWriter.print(nextCourseId);
@@ -86,9 +85,9 @@ public class Course implements Saveable {
         printWriter.print(Reader.DELIMITER);
         printWriter.print(type);
         printWriter.print(Reader.DELIMITER);
-        printWriter.println(code);
+        printWriter.print(code);
         printWriter.print(Reader.DELIMITER);
-        printWriter.println(grade);
+        printWriter.print(grade);
         printWriter.print(Reader.DELIMITER);
         printWriter.println(credits);
     }
