@@ -48,6 +48,10 @@ public class Course implements Saveable {
         this.credits = credits;
     }
 
+    //EFFECTS: get a course's ID
+    public int getId() {
+        return id;
+    }
 
     //EFFECTS: get a course's type
     public String getType() {
