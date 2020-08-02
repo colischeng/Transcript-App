@@ -14,6 +14,9 @@ import java.util.List;
 public class Reader {
     public static final String DELIMITER = ",";
 
+    // EFFECTS: constructs a default constructor that will read the data file
+    public Reader(){}
+
     // EFFECTS: returns a list of courses parsed from file; throws
     // IOException if an exception is raised when opening / reading from file
     public static List<Course> readCourses(File file) throws IOException {
