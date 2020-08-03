@@ -169,8 +169,12 @@ public class TranscriptApp {
     //          - otherwise, do nothing
     private void doRemove() {
         if (transcript.length() > 0) {
-            transcript.removeCourse();
-            System.out.println("Last added course was successfully removed.");
+            System.out.println("\nWhich nth course do you want to remove?\n");
+            doPrint();
+            int n = input.nextInt();
+            transcript.removeCourse(n);
+            System.out.println("Course was successfully removed.\n");
+            doPrint();
         } else {
             System.out.println("No courses can be removed from an empty transcript");
         }
@@ -181,9 +185,12 @@ public class TranscriptApp {
         if (transcript.getCourseList().size() == 0) {
             System.out.println("Your Transcript is empty");
         } else {
+            int index = 1;
             System.out.println("Your Transcript \n");
             for (Course c : transcript.getCourseList()) {
-                System.out.println(c.toString());
+                String indexString = (index + ". ");
+                System.out.println(indexString + c.toString());
+                index++;
             }
         }
     }

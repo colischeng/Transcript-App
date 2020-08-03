@@ -12,7 +12,6 @@ class TranscriptTest {
     Course comm491;
     Course math307;
     Course cpsc121;
-    Course engl112;
 
     Transcript testTranscript;
 
@@ -24,7 +23,6 @@ class TranscriptTest {
         comm491 = new Course("COMM", 491, 85, 3);
         math307 = new Course("MATH", 307, 74, 3);
         cpsc121 = new Course("CPSC", 121, 81, 4);
-        engl112 = new Course("ENGL", 112, 86, 3);
         testTranscript = new Transcript();
         testTranscript.addCourse(cpsc110);
         testTranscript.addCourse(cpsc221);
@@ -57,7 +55,12 @@ class TranscriptTest {
 
     @Test
     public void removeCoursesTest() {
-        testTranscript.removeCourse();
+        testTranscript.removeCourse(5);
+        assertEquals(cpsc110,testTranscript.getCourseList().get(0));
+        assertEquals(cpsc221,testTranscript.getCourseList().get(1));
+        assertEquals(math221,testTranscript.getCourseList().get(2));
+        assertEquals(comm491,testTranscript.getCourseList().get(3));
+        assertEquals(cpsc121,testTranscript.getCourseList().get(4));
         assertEquals(5, testTranscript.length());
 
     }

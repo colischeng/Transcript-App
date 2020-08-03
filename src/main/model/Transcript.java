@@ -51,11 +51,11 @@ public class Transcript {
 
     }
 
-    // REQUIRES: transcript is not empty
+    // REQUIRES: transcript is not empty, n> 0
     // MODIFIES: this
-    // EFFECTS: removes the last courses added onto transcript
-    public void removeCourse() {
-        int index = (courseList.size() - 1);
+    // EFFECTS: removes the nth course transcript
+    public void removeCourse(int n) {
+        int index = (n - 1);
         courseList.remove(index);
     }
 
