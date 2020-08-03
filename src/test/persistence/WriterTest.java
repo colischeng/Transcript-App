@@ -13,7 +13,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
-public class WriterTest {
+public class WriterTest { // taken largely from TellerApp
     private static final String TEST_FILE = "./data/testCourses.txt";
     private Writer testWriter;
     private Course courseOne;
@@ -50,7 +50,7 @@ public class WriterTest {
             assertEquals(87, courseTwo.getGrade());
             assertEquals(6, courseTwo.getCredits());
 
-            // verify that ID of next Course created is 3 (checks that nextAccountId was restored)
+            // verify that ID of next Course created is 3 (checks that nextCourseId was restored)
             Course next = new Course("COMM", 101, 80, 3);
             assertEquals(2, next.getId());
         } catch (IOException e) {

@@ -10,8 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 
 // A reader that can read transcript data from a file
-// taken largely from TellerApp
-public class Reader {
+public class Reader { // taken largely from TellerApp
     public static final String DELIMITER = ",";
 
     // EFFECTS: constructs a default constructor that will read the data file

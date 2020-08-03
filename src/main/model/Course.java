@@ -13,8 +13,9 @@ public class Course implements Saveable {
     private final String type;            // department of course
     private final Integer code;           // course number
     private final Integer grade;          // grade received in course
-    private final Integer credits;        // number of credits teh course is worth
+    private final Integer credits;        // number of credits the course is worth
 
+    // REQUIRES: name has a non-zero length; code, and credits >= 0; 0 >= grade >= 100
     // EFFECTS: construct new Course object
     public Course(String type,
                   Integer code,
@@ -28,7 +29,7 @@ public class Course implements Saveable {
     }
 
     /*
-     * REQUIRES: name has a non-zero length; code, grade, and credits >= 0
+     * REQUIRES: name has a non-zero length; code, and credits >= 0; 0 >= grade >= 100
      * EFFECTS: constructs a course with id, name and balance;
      * nextCourseId is the id of the next course to be constructed
      * NOTE: this constructor is to be used only when constructing

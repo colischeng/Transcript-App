@@ -10,7 +10,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
-public class ReaderTest {
+public class ReaderTest { // taken largely from TellerApp
     private Reader testReader;
 
     @Test
@@ -71,7 +71,7 @@ public class ReaderTest {
     void testIOException() {
         try {
             testReader = new Reader();
-            testReader.readCourses(new File("./path/does/not/exist/testAccount.txt"));
+            testReader.readCourses(new File("./path/does/not/exist/testCourse.txt"));
         } catch (IOException e) {
             // expected
         }
