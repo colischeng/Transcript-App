@@ -11,10 +11,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
 public class ReaderTest {
+    private Reader testReader;
+
     @Test
     void testParseCoursesFile1() {
         try {
-            List<Course> courses = Reader.readCourses(new File("./data/testCourseFile1.txt"));
+            testReader = new Reader();
+            List<Course> courses = testReader.readCourses(new File("./data/testCourseFile1.txt"));
             Course courseOne = courses.get(0);
             assertEquals(0, courseOne.getId());
             assertEquals("COMM", courseOne.getType());
@@ -40,7 +43,8 @@ public class ReaderTest {
     @Test
     void testParseCoursesFile2() {
         try {
-            List<Course> courses = Reader.readCourses(new File("./data/testCourseFile2.txt"));
+            testReader = new Reader();
+            List<Course> courses = testReader.readCourses(new File("./data/testCourseFile2.txt"));
             Course courseOne = courses.get(0);
             assertEquals(2, courseOne.getId());
             assertEquals("EPSE", courseOne.getType());
@@ -66,7 +70,8 @@ public class ReaderTest {
     @Test
     void testIOException() {
         try {
-            Reader.readCourses(new File("./path/does/not/exist/testAccount.txt"));
+            testReader = new Reader();
+            testReader.readCourses(new File("./path/does/not/exist/testAccount.txt"));
         } catch (IOException e) {
             // expected
         }
