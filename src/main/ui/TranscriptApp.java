@@ -178,10 +178,13 @@ public class TranscriptApp {
 
     // EFFECTS: print the entire transcript object
     private void doPrint() {
-        System.out.println("Your Transcript \n");
-        for (Course c : transcript.getCourseList()) {
-            System.out.println(c.toString());
+        if (transcript.getCourseList().size() == 0) {
+            System.out.println("Your Transcript is empty");
+        } else {
+            System.out.println("Your Transcript \n");
+            for (Course c : transcript.getCourseList()) {
+                System.out.println(c.toString());
+            }
         }
     }
-
 }
