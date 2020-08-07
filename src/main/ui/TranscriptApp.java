@@ -7,12 +7,8 @@ import persistence.Writer;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.util.List;
 import java.util.Scanner;
 
@@ -22,13 +18,15 @@ public class TranscriptApp extends JFrame {
     private static final String COURSES_FILE = "./data/courses.txt";
     private Transcript transcript;
     private Scanner input;
+    private JTextArea textArea;
 
-    private static final int WIDTH = 1400;
-    private static final int HEIGHT = 1000;
+    private static final int WIDTH = 700;
+    private static final int HEIGHT = 700;
 
     //EFFECTS: runs transcript application
     public TranscriptApp() {
         super("Transcript App");
+        transcript = new Transcript();
         initializeGraphics();
         runTranscript();
     }
@@ -41,7 +39,10 @@ public class TranscriptApp extends JFrame {
         setSize(WIDTH, HEIGHT);
 
         panel.add(methodsPanel());
-        panel.add(createTextField());
+
+        textArea = createTextField();
+
+        panel.add(textArea);
 
         add(panel);
         setVisible(true);
@@ -66,19 +67,22 @@ public class TranscriptApp extends JFrame {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
-        JPanel field1 = fields("What is the course type?", "");
-        JPanel field2 = fields("What is the course number?", "");
-        JPanel field3 = fields("What was your grade in the course?", "");
-        JPanel field4 = fields("How many credits was this course worth?", "");
+        JPanel typePanel = questionPanels("What is the course type?", "");
+        JPanel numberPanel = questionPanels("What is the course number?", "");
+        JPanel gradePanel = questionPanels("What was your grade in the course?", "");
+        JPanel creditPanel = questionPanels("How many credits was this course worth?", "");
 
         JButton addButton = new JButton("Add a Course");
 
-        panel.add(field1);
-        panel.add(field2);
-        panel.add(field3);
-        panel.add(field4);
+        panel.add(typePanel);
+        panel.add(numberPanel);
+        panel.add(gradePanel);
+        panel.add(creditPanel);
+
+        typePanel.getComponents();
 
         panel.add(addButton);
+
         return panel;
     }
 
@@ -86,20 +90,31 @@ public class TranscriptApp extends JFrame {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
-        JPanel field1 = fields("What GPA do you want to achieve with your next 3-credit course?", "");
+        JPanel questionPanel =
+                questionPanels("What GPA do you want to achieve with your next 3-credit course?", "");
 
-        JButton targetButton = new JButton("Calculate Target GPA");
+        JButton targetButton = createTargetButton();
 
-        panel.add(field1);
+        panel.add(questionPanel);
         panel.add(targetButton);
         return panel;
+    }
+
+    public JButton createTargetButton() {
+        JButton clearButton = new JButton("Calculate Target GPA");
+        ActionListener actionListener = e -> {
+            textArea.setText(printTranscript() + "\nYou need to achieve ___ in your next 3-credit course");
+            doTarget();
+        };
+        clearButton.addActionListener(actionListener);
+        return clearButton;
     }
 
     private JPanel createRemovalFields() {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
-        JPanel field1 = fields("Which nth course on your transcript do you want to remove?", "");
+        JPanel field1 = questionPanels("Which nth course on your transcript do you want to remove?", "");
 
         JButton targetButton = new JButton("Remove Course");
 
@@ -108,7 +123,7 @@ public class TranscriptApp extends JFrame {
         return panel;
     }
 
-    public JPanel fields(String label, String question) {
+    public JPanel questionPanels(String label, String question) {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         JLabel prompt = new JLabel(label);
@@ -121,16 +136,33 @@ public class TranscriptApp extends JFrame {
     }
 
     public JTextArea createTextField() {
-        JTextArea textArea = new JTextArea("Agsfgshadgs");
-        textArea.setPreferredSize(new Dimension(WIDTH, (int) (HEIGHT / 1.5)));
-        return textArea;
+        JTextArea area = new JTextArea();
+        area.setPreferredSize(new Dimension(WIDTH, (int) (HEIGHT / 1.5)));
+        area.setEditable(false);
+        area.setText(printTranscript());
 
+        return area;
     }
+
+    private String printTranscript() {
+
+        int index = 1;
+        String title = ("Your Transcript \n\n");
+        String records = "";
+        for (Course c : transcript.getCourseList()) {
+            String indexString = (index + ". ");
+            records = (records + indexString + c.toString() + "\n");
+            index++;
+        }
+        return (title + records);
+    }
+
 
     public JButton createClearButton() {
         JButton clearButton = new JButton("Clear Transcript");
         ActionListener actionListener = e -> { //taken from "Java Programming For Beginners" from Daniel Korig
             transcript.getCourseList().clear();
+            textArea.setText("Your transcript history has been cleared");
             System.out.println("\nYour Transcript is now clear");
         };
         clearButton.addActionListener(actionListener);
@@ -157,7 +189,6 @@ public class TranscriptApp extends JFrame {
         boolean keepGoing = true;
         String command;
         input = new Scanner(System.in);
-        transcript = new Transcript();
 
         while (keepGoing) {
             displayMenu();
@@ -189,8 +220,15 @@ public class TranscriptApp extends JFrame {
                 }
                 System.out.println("Courses loaded from " + COURSES_FILE + "\n");
                 doPrint();
+                createTextField();
+            }
+            if (courses.size() == 0) {
+                textArea.setText("No past transcript exists. No courses have been loaded.");
+            } else {
+                textArea.setText(printTranscript());
             }
         } catch (IOException e) {
+            textArea.setText("Unable to load transcript to " + COURSES_FILE);
             init();
         }
     }
@@ -203,8 +241,10 @@ public class TranscriptApp extends JFrame {
                 writer.write(c);
             }
             writer.close();
+            textArea.setText(printTranscript() + "\nCourses saved to file" + COURSES_FILE);
             System.out.println("Courses saved to file " + COURSES_FILE);
         } catch (FileNotFoundException e) {
+            textArea.setText("Unable to save transcript to " + COURSES_FILE);
             System.out.println("Unable to save transcript to " + COURSES_FILE);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
