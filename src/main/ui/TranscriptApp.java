@@ -3,9 +3,12 @@ package ui;
 import model.Course;
 import model.Transcript;
 import persistence.Reader;
-import persistence.Saveable;
 import persistence.Writer;
 
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -15,14 +18,137 @@ import java.util.Scanner;
 
 // Represents the instantiated transcript app class
 
-public class TranscriptApp {
+public class TranscriptApp extends JFrame {
     private static final String COURSES_FILE = "./data/courses.txt";
     private Transcript transcript;
     private Scanner input;
 
+    private static final int WIDTH = 1400;
+    private static final int HEIGHT = 1000;
+
     //EFFECTS: runs transcript application
     public TranscriptApp() {
+        super("Transcript App");
+        initializeGraphics();
         runTranscript();
+    }
+
+    private void initializeGraphics() {
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(WIDTH, HEIGHT);
+
+        panel.add(methodsPanel());
+        panel.add(createTextField());
+
+        add(panel);
+        setVisible(true);
+    }
+
+    private JPanel methodsPanel() {
+        JPanel panel = new JPanel();
+        setLayout(new FlowLayout());
+
+        panel.add(createAddFields());
+        panel.add(createTargetFields());
+        panel.add(createRemovalFields());
+        panel.add(createClearButton());
+        panel.add(createSaveButton());
+        panel.add(createLoadButton());
+        panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        return panel;
+    }
+
+    private JPanel createAddFields() {
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+
+        JPanel field1 = fields("What is the course type?", "");
+        JPanel field2 = fields("What is the course number?", "");
+        JPanel field3 = fields("What was your grade in the course?", "");
+        JPanel field4 = fields("How many credits was this course worth?", "");
+
+        JButton addButton = new JButton("Add a Course");
+
+        panel.add(field1);
+        panel.add(field2);
+        panel.add(field3);
+        panel.add(field4);
+
+        panel.add(addButton);
+        return panel;
+    }
+
+    private JPanel createTargetFields() {
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+
+        JPanel field1 = fields("What GPA do you want to achieve with your next 3-credit course?", "");
+
+        JButton targetButton = new JButton("Calculate Target GPA");
+
+        panel.add(field1);
+        panel.add(targetButton);
+        return panel;
+    }
+
+    private JPanel createRemovalFields() {
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+
+        JPanel field1 = fields("Which nth course on your transcript do you want to remove?", "");
+
+        JButton targetButton = new JButton("Remove Course");
+
+        panel.add(field1);
+        panel.add(targetButton);
+        return panel;
+    }
+
+    public JPanel fields(String label, String question) {
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        JLabel prompt = new JLabel(label);
+        JTextField field = new JTextField(question);
+        field.setPreferredSize(new Dimension(20, 22));
+
+        panel.add(prompt);
+        panel.add(field);
+        return panel;
+    }
+
+    public JTextArea createTextField() {
+        JTextArea textArea = new JTextArea("Agsfgshadgs");
+        textArea.setPreferredSize(new Dimension(WIDTH, (int) (HEIGHT / 1.5)));
+        return textArea;
+
+    }
+
+    public JButton createClearButton() {
+        JButton clearButton = new JButton("Clear Transcript");
+        ActionListener actionListener = e -> { //taken from "Java Programming For Beginners" from Daniel Korig
+            transcript.getCourseList().clear();
+            System.out.println("\nYour Transcript is now clear");
+        };
+        clearButton.addActionListener(actionListener);
+        return clearButton;
+    }
+
+    public JButton createSaveButton() {
+        JButton saveButton = new JButton("Save Transcript");
+        ActionListener actionListener = e -> saveCourses();
+        saveButton.addActionListener(actionListener);
+        return saveButton;
+    }
+
+    public JButton createLoadButton() {
+        JButton loadButton = new JButton("Load Transcript");
+        ActionListener actionListener = e -> loadCourses();
+        loadButton.addActionListener(actionListener);
+        return loadButton;
     }
 
     // MODIFIES: this
