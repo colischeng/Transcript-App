@@ -1,5 +1,6 @@
 package ui;
 
+
 import model.Course;
 import model.Transcript;
 import persistence.Reader;
@@ -7,12 +8,15 @@ import persistence.Writer;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
 import java.util.List;
 import java.util.Scanner;
 
-import static java.lang.Integer.parseInt;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.AudioSystem;
 
 // Represents the instantiated transcript app class
 
@@ -28,6 +32,7 @@ public class TranscriptApp extends JFrame {
     private JTextField textFieldCredits;
     private JTextField textFieldTarget;
     private JTextField textFieldRemove;
+
 
     private static final int WIDTH = 700;
     private static final int HEIGHT = 700;
@@ -99,6 +104,7 @@ public class TranscriptApp extends JFrame {
     public JButton createAddButton() {
         JButton addButton = new JButton("Add a Course");
         ActionListener actionListener = e -> {
+            playSound("./src/main/ui/tools/audio/addACourse.wav");
             String courseType = "";
             int courseNumber = 0;
             int courseGrade = 0;
@@ -109,8 +115,7 @@ public class TranscriptApp extends JFrame {
                 courseGrade = Integer.parseInt(textFieldGrade.getText());
                 courseCredits = Integer.parseInt(textFieldCredits.getText());
             } catch (Exception exception) {
-                textArea.setText(printTranscript()
-                        + "\nAn error has occurred and no courses were added. Please check fields");
+                textArea.setText(printTranscript() + "\nAn error has occurred and no courses were added.");
             }
             Course course = new Course(courseType, courseNumber, courseGrade, courseCredits);
             transcript.addCourse(course);
@@ -141,6 +146,7 @@ public class TranscriptApp extends JFrame {
     public JButton createTargetButton() {
         JButton targetButton = new JButton("Calculate Target GPA");
         ActionListener actionListener = e -> {
+            playSound("./src/main/ui/tools/audio/calculateTargetGPA.wav");
             String response = textFieldTarget.getText();
             int targetField = 0;
             try {
@@ -178,6 +184,7 @@ public class TranscriptApp extends JFrame {
     public JButton createRemoveButton() {
         JButton removeButton = new JButton("Remove Course");
         ActionListener actionListener = e -> {
+            playSound("./src/main/ui/tools/audio/removeCourse.wav");
             String response = textFieldRemove.getText();
             int removeField = 0;
             try {
@@ -234,6 +241,7 @@ public class TranscriptApp extends JFrame {
     public JButton createCumulativeButton() {
         JButton cumulativeButton = new JButton("Calculate Cumulative");
         ActionListener actionListener = e -> { //taken from "Java Programming For Beginners" from Daniel Korig
+            playSound("./src/main/ui/tools/audio/calculateCumulative.wav");
             if (transcript.getCourseList().size() == 0) {
                 textArea.setText("No courses are currently in your transcript. Cumulative GPA was not calculated");
             } else {
@@ -249,6 +257,7 @@ public class TranscriptApp extends JFrame {
         ActionListener actionListener = e -> { //taken from "Java Programming For Beginners" from Daniel Korig
             transcript.getCourseList().clear();
             textArea.setText("Your transcript history has been cleared");
+            playSound("./src/main/ui/tools/audio/clearTranscript.wav");
             System.out.println("\nYour Transcript is now clear");
         };
         clearButton.addActionListener(actionListener);
@@ -257,14 +266,20 @@ public class TranscriptApp extends JFrame {
 
     public JButton createSaveButton() {
         JButton saveButton = new JButton("Save Transcript");
-        ActionListener actionListener = e -> saveCourses();
+        ActionListener actionListener = e -> {
+            playSound("./src/main/ui/tools/audio/saveTranscript.wav");
+            saveCourses();
+        };
         saveButton.addActionListener(actionListener);
         return saveButton;
     }
 
     public JButton createLoadButton() {
         JButton loadButton = new JButton("Load Transcript");
-        ActionListener actionListener = e -> loadCourses();
+        ActionListener actionListener = e -> {
+            playSound("./src/main/ui/tools/audio/loadTranscript.wav");
+            loadCourses();
+        };
         loadButton.addActionListener(actionListener);
         return loadButton;
     }
@@ -444,6 +459,18 @@ public class TranscriptApp extends JFrame {
                 System.out.println(indexString + c.toString());
                 index++;
             }
+        }
+    }
+
+    public void playSound(String soundName) {
+        try {
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(soundName).getAbsoluteFile());
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioInputStream);
+            clip.start();
+        } catch (Exception ex) {
+            System.out.println("Error with playing sound.");
+            ex.printStackTrace();
         }
     }
 }
