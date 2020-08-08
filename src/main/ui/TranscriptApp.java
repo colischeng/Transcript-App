@@ -61,6 +61,7 @@ public class TranscriptApp extends JFrame {
         setLayout(new FlowLayout());
 
         panel.add(createAddFields());
+        panel.add(createCumulativeButton());
         panel.add(createTargetFields());
         panel.add(createRemovalFields());
         panel.add(createClearButton());
@@ -132,8 +133,8 @@ public class TranscriptApp extends JFrame {
 
         JButton targetButton = createTargetButton();
 
-        targetPanel.add(questionPanel,0);
-        targetPanel.add(targetButton,1);
+        targetPanel.add(questionPanel);
+        targetPanel.add(targetButton);
         return targetPanel;
     }
 
@@ -148,7 +149,7 @@ public class TranscriptApp extends JFrame {
                 //initialize
             }
             if (transcript.target(targetField) == -1) {
-                textArea.setText("This GPA is not attainable.");
+                textArea.setText(printTranscript() + "\nThis GPA is not attainable.");
             } else {
                 textArea.setText(
                         printTranscript() + "\nYou need to score " + transcript.target(targetField)
@@ -163,13 +164,36 @@ public class TranscriptApp extends JFrame {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
-        JPanel field1 = questionPanels("Which nth course on your transcript do you want to remove?", "");
+        JPanel remove = questionPanels("Which nth course on your transcript do you want to remove?", "");
 
-        JButton targetButton = new JButton("Remove Course");
+        textFieldRemove = ((JTextField) remove.getComponent(1));
 
-        panel.add(field1);
-        panel.add(targetButton);
+        JButton removeButton = createRemoveButton();
+
+        panel.add(remove);
+        panel.add(removeButton);
         return panel;
+    }
+
+    public JButton createRemoveButton() {
+        JButton removeButton = new JButton("Remove Course");
+        ActionListener actionListener = e -> {
+            String response = textFieldRemove.getText();
+            int removeField = 0;
+            try {
+                removeField = Integer.parseInt(response);
+                transcript.getCourseList().remove(removeField - 1);
+                textArea.setText(
+                        printTranscript() + "\nThe course at index " + removeField + " was removed");
+            } catch (Exception exception) {
+                textArea.setText(printTranscript()
+                        + "\nAn error occurred and no courses were removed. Check that your index is within range.");
+            }
+
+
+        };
+        removeButton.addActionListener(actionListener);
+        return removeButton;
     }
 
     public JPanel questionPanels(String label, String question) {
@@ -207,6 +231,18 @@ public class TranscriptApp extends JFrame {
         return (title + records);
     }
 
+    public JButton createCumulativeButton() {
+        JButton cumulativeButton = new JButton("Calculate Cumulative");
+        ActionListener actionListener = e -> { //taken from "Java Programming For Beginners" from Daniel Korig
+            if (transcript.getCourseList().size() == 0) {
+                textArea.setText("No courses are currently in your transcript. Cumulative GPA was not calculated");
+            } else {
+                textArea.setText(printTranscript() + "\nYour cumulative GPA is " + transcript.cumulativeGPA());
+            }
+        };
+        cumulativeButton.addActionListener(actionListener);
+        return cumulativeButton;
+    }
 
     public JButton createClearButton() {
         JButton clearButton = new JButton("Clear Transcript");
