@@ -12,13 +12,22 @@ import java.io.*;
 import java.util.List;
 import java.util.Scanner;
 
+import static java.lang.Integer.parseInt;
+
 // Represents the instantiated transcript app class
 
 public class TranscriptApp extends JFrame {
     private static final String COURSES_FILE = "./data/courses.txt";
-    private Transcript transcript;
+    private Transcript transcript = new Transcript();
     private Scanner input;
     private JTextArea textArea;
+
+    private JTextField textFieldCourseType;
+    private JTextField textFieldCourseNumber;
+    private JTextField textFieldGrade;
+    private JTextField textFieldCredits;
+    private JTextField textFieldTarget;
+    private JTextField textFieldRemove;
 
     private static final int WIDTH = 700;
     private static final int HEIGHT = 700;
@@ -26,7 +35,6 @@ public class TranscriptApp extends JFrame {
     //EFFECTS: runs transcript application
     public TranscriptApp() {
         super("Transcript App");
-        transcript = new Transcript();
         initializeGraphics();
         runTranscript();
     }
@@ -64,50 +72,91 @@ public class TranscriptApp extends JFrame {
     }
 
     private JPanel createAddFields() {
-        JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        JPanel addCoursePanel = new JPanel();
+        addCoursePanel.setLayout(new BoxLayout(addCoursePanel, BoxLayout.Y_AXIS));
 
         JPanel typePanel = questionPanels("What is the course type?", "");
         JPanel numberPanel = questionPanels("What is the course number?", "");
         JPanel gradePanel = questionPanels("What was your grade in the course?", "");
         JPanel creditPanel = questionPanels("How many credits was this course worth?", "");
 
+        textFieldCourseType = ((JTextField) typePanel.getComponent(1));
+        textFieldCourseNumber = ((JTextField) numberPanel.getComponent(1));
+        textFieldGrade = ((JTextField) gradePanel.getComponent(1));
+        textFieldCredits = ((JTextField) creditPanel.getComponent(1));
+
+        JButton addButton = createAddButton();
+
+        addCoursePanel.add(typePanel);
+        addCoursePanel.add(numberPanel);
+        addCoursePanel.add(gradePanel);
+        addCoursePanel.add(creditPanel);
+        addCoursePanel.add(addButton);
+        return addCoursePanel;
+    }
+
+    public JButton createAddButton() {
         JButton addButton = new JButton("Add a Course");
-
-        panel.add(typePanel);
-        panel.add(numberPanel);
-        panel.add(gradePanel);
-        panel.add(creditPanel);
-
-        typePanel.getComponents();
-
-        panel.add(addButton);
-
-        return panel;
+        ActionListener actionListener = e -> {
+            String courseType = "";
+            int courseNumber = 0;
+            int courseGrade = 0;
+            int courseCredits = 0;
+            try {
+                courseType = (textFieldCourseType.getText());
+                courseNumber = Integer.parseInt(textFieldCourseNumber.getText());
+                courseGrade = Integer.parseInt(textFieldGrade.getText());
+                courseCredits = Integer.parseInt(textFieldCredits.getText());
+            } catch (Exception exception) {
+                textArea.setText(printTranscript()
+                        + "\nAn error has occurred and no courses were added. Please check fields");
+            }
+            Course course = new Course(courseType, courseNumber, courseGrade, courseCredits);
+            transcript.addCourse(course);
+            textArea.setText(printTranscript()
+                    + "\n" + courseType + " " + courseNumber + " has been added to your transcript\n");
+            System.out.println(courseType + " " + courseNumber + " has been added to your transcript\n");
+        };
+        addButton.addActionListener(actionListener);
+        return addButton;
     }
 
     private JPanel createTargetFields() {
-        JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        JPanel targetPanel = new JPanel();
+        targetPanel.setLayout(new BoxLayout(targetPanel, BoxLayout.Y_AXIS));
 
         JPanel questionPanel =
                 questionPanels("What GPA do you want to achieve with your next 3-credit course?", "");
 
+        textFieldTarget = ((JTextField) questionPanel.getComponent(1));
+
         JButton targetButton = createTargetButton();
 
-        panel.add(questionPanel);
-        panel.add(targetButton);
-        return panel;
+        targetPanel.add(questionPanel,0);
+        targetPanel.add(targetButton,1);
+        return targetPanel;
     }
 
     public JButton createTargetButton() {
-        JButton clearButton = new JButton("Calculate Target GPA");
+        JButton targetButton = new JButton("Calculate Target GPA");
         ActionListener actionListener = e -> {
-            textArea.setText(printTranscript() + "\nYou need to achieve ___ in your next 3-credit course");
-            doTarget();
+            String response = textFieldTarget.getText();
+            int targetField = 0;
+            try {
+                targetField = Integer.parseInt(response);
+            } catch (Exception exception) {
+                //initialize
+            }
+            if (transcript.target(targetField) == -1) {
+                textArea.setText("This GPA is not attainable.");
+            } else {
+                textArea.setText(
+                        printTranscript() + "\nYou need to score " + transcript.target(targetField)
+                                + " in your next 3-credit course.");
+            }
         };
-        clearButton.addActionListener(actionListener);
-        return clearButton;
+        targetButton.addActionListener(actionListener);
+        return targetButton;
     }
 
     private JPanel createRemovalFields() {
@@ -124,14 +173,15 @@ public class TranscriptApp extends JFrame {
     }
 
     public JPanel questionPanels(String label, String question) {
+
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         JLabel prompt = new JLabel(label);
         JTextField field = new JTextField(question);
         field.setPreferredSize(new Dimension(20, 22));
 
-        panel.add(prompt);
-        panel.add(field);
+        panel.add(prompt,0);
+        panel.add(field,1);
         return panel;
     }
 
@@ -225,7 +275,7 @@ public class TranscriptApp extends JFrame {
             if (courses.size() == 0) {
                 textArea.setText("No past transcript exists. No courses have been loaded.");
             } else {
-                textArea.setText(printTranscript());
+                textArea.setText(printTranscript() + "\nCourses loaded from " + COURSES_FILE + "\n");
             }
         } catch (IOException e) {
             textArea.setText("Unable to load transcript to " + COURSES_FILE);
