@@ -1,6 +1,5 @@
 package ui;
 
-
 import model.Course;
 import model.Transcript;
 import persistence.Reader;
@@ -32,7 +31,6 @@ public class TranscriptApp extends JFrame {
     private JTextField textFieldCredits;
     private JTextField textFieldTarget;
     private JTextField textFieldRemove;
-
 
     private static final int WIDTH = 700;
     private static final int HEIGHT = 700;
@@ -257,7 +255,6 @@ public class TranscriptApp extends JFrame {
         ActionListener actionListener = e -> { //taken from "Java Programming For Beginners" from Daniel Korig
             transcript.getCourseList().clear();
             textArea.setText("Your transcript history has been cleared");
-            playSound("./src/main/ui/tools/audio/clearTranscript.wav");
             System.out.println("\nYour Transcript is now clear");
         };
         clearButton.addActionListener(actionListener);
