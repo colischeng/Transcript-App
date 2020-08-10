@@ -31,7 +31,7 @@ public class TranscriptApp extends JFrame {
     private JTextField textFieldTarget;
     private JTextField textFieldRemove;
 
-    private static final int WIDTH = 2000;
+    private static final int WIDTH = 1000;
     private static final int HEIGHT = 1000;
 
     //EFFECTS: runs transcript application
@@ -62,19 +62,29 @@ public class TranscriptApp extends JFrame {
     //EFFECTS: adds the "Add A Course", "Calculate Cumulative", "Calculate Target", "Remove Course", "Clear Transcript",
     // "Save Transcript", "Load Transcript", panels/buttons onto the GUI
     private JPanel methodsPanel() {
-        JPanel panel = new JPanel();
+        JPanel mainPanel = new JPanel();
         setLayout(new FlowLayout());
 
-        panel.add(createAddFields());
-        panel.add(createCumulativeButton());
-        panel.add(createTargetFields());
-        panel.add(createRemovalFields());
-        panel.add(createClearButton());
-        panel.add(createSaveButton());
-        panel.add(createLoadButton());
-        panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        mainPanel.add(createAddFields());
 
-        return panel;
+        JPanel oneFieldPanel = new JPanel();
+        oneFieldPanel.setLayout(new BoxLayout(oneFieldPanel, BoxLayout.Y_AXIS));
+        oneFieldPanel.add(createTargetFields());
+        oneFieldPanel.add(createRemovalFields());
+
+        JPanel buttonsOnlyPanel = new JPanel();
+        buttonsOnlyPanel.setLayout(new BoxLayout(buttonsOnlyPanel, BoxLayout.Y_AXIS));
+        buttonsOnlyPanel.add(createCumulativeButton());
+        buttonsOnlyPanel.add(createClearButton());
+        buttonsOnlyPanel.add(createSaveButton());
+        buttonsOnlyPanel.add(createLoadButton());
+
+        mainPanel.add(oneFieldPanel);
+        mainPanel.add(buttonsOnlyPanel);
+
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        return mainPanel;
     }
 
     //EFFECTS: creates the "Add a course" panel (with fields) for the GUI
@@ -218,7 +228,7 @@ public class TranscriptApp extends JFrame {
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         JLabel prompt = new JLabel(label);
         JTextField field = new JTextField(question);
-        field.setPreferredSize(new Dimension(20, 22));
+        field.setPreferredSize(new Dimension(10, 22));
 
         panel.add(prompt,0);
         panel.add(field,1);
