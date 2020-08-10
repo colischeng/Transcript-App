@@ -20,7 +20,7 @@ student services centre misses many features.
 ## Instructions for Grader
 
 - You can generate the first required event of adding a course to the transcript by entering the appropriate 
-information in the "Add a Course" panel and clicking the button "Add a Course"
+information in the "Add a Course" fields and clicking the button "Add a Course"
 - You can generate the second required event of removing a course on the transcript by inputting an index within
 range and clicking the button "Remove Course"
 - You can trigger my audio component by clicking the "Adding a Course" button. The GUI should say the words

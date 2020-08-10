@@ -7,7 +7,6 @@ import persistence.Writer;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
 import java.util.List;
@@ -42,6 +41,7 @@ public class TranscriptApp extends JFrame {
         runTranscript();
     }
 
+    //EFFECTS: initializes the GUI associated with the transcript app
     private void initializeGraphics() {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
@@ -59,6 +59,8 @@ public class TranscriptApp extends JFrame {
         setVisible(true);
     }
 
+    //EFFECTS: adds the "Add A Course", "Calculate Cumulative", "Calculate Target", "Remove Course", "Clear Transcript",
+    // "Save Transcript", "Load Transcript", panels/buttons onto the GUI
     private JPanel methodsPanel() {
         JPanel panel = new JPanel();
         setLayout(new FlowLayout());
@@ -75,6 +77,7 @@ public class TranscriptApp extends JFrame {
         return panel;
     }
 
+    //EFFECTS: creates the "Add a course" panel (with fields) for the GUI
     private JPanel createAddFields() {
         JPanel addCoursePanel = new JPanel();
         addCoursePanel.setLayout(new BoxLayout(addCoursePanel, BoxLayout.Y_AXIS));
@@ -99,10 +102,12 @@ public class TranscriptApp extends JFrame {
         return addCoursePanel;
     }
 
+    //MODIFIES: this
+    //EFFECTS: creates the "Add a course" button for the "Add a course" panel for the GUI
     public JButton createAddButton() {
         JButton addButton = new JButton("Add a Course");
         ActionListener actionListener = e -> {
-            playSound("./src/main/ui/tools/audio/addACourse.wav");
+            playSound("./data/audio/addACourse.wav");
             String courseType = "";
             int courseNumber = 0;
             int courseGrade = 0;
@@ -125,6 +130,7 @@ public class TranscriptApp extends JFrame {
         return addButton;
     }
 
+    //EFFECTS: creates the "Calculate Target" panel (with fields) for the GUI
     private JPanel createTargetFields() {
         JPanel targetPanel = new JPanel();
         targetPanel.setLayout(new BoxLayout(targetPanel, BoxLayout.Y_AXIS));
@@ -141,10 +147,11 @@ public class TranscriptApp extends JFrame {
         return targetPanel;
     }
 
-    public JButton createTargetButton() {
+    //EFFECTS: creates the "Calculate target" button for the "Calculate target" panel for the GUI
+    private JButton createTargetButton() {
         JButton targetButton = new JButton("Calculate Target GPA");
         ActionListener actionListener = e -> {
-            playSound("./src/main/ui/tools/audio/calculateTargetGPA.wav");
+            playSound("./data/audio/calculateTargetGPA.wav");
             String response = textFieldTarget.getText();
             int targetField = 0;
             try {
@@ -164,6 +171,8 @@ public class TranscriptApp extends JFrame {
         return targetButton;
     }
 
+    //MODIFIES: this
+    //EFFECTS: creates the "Remove course" panel (with fields) for the GUI
     private JPanel createRemovalFields() {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
@@ -179,12 +188,14 @@ public class TranscriptApp extends JFrame {
         return panel;
     }
 
+    //MODIFIES: this
+    //EFFECTS: creates the "Remove course" button for the "Remove course" panel for the GUI
     public JButton createRemoveButton() {
         JButton removeButton = new JButton("Remove Course");
         ActionListener actionListener = e -> {
-            playSound("./src/main/ui/tools/audio/removeCourse.wav");
+            playSound("./data/audio/removeCourse.wav");
             String response = textFieldRemove.getText();
-            int removeField = 0;
+            int removeField;
             try {
                 removeField = Integer.parseInt(response);
                 transcript.getCourseList().remove(removeField - 1);
@@ -201,8 +212,8 @@ public class TranscriptApp extends JFrame {
         return removeButton;
     }
 
+    //EFFECTS: Abstract method that creates panels that have editable text fields (Add, Target, Remove functionalities)
     public JPanel questionPanels(String label, String question) {
-
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         JLabel prompt = new JLabel(label);
@@ -214,6 +225,8 @@ public class TranscriptApp extends JFrame {
         return panel;
     }
 
+    //EFFECTS: Places the transcript area onto the GUI (the part of the GUI that, according to the project
+    // specifications, "displays the Xs that have been added to the Y")
     public JTextArea createTextField() {
         JTextArea area = new JTextArea();
         area.setPreferredSize(new Dimension(WIDTH, (int) (HEIGHT / 1.5)));
@@ -223,8 +236,8 @@ public class TranscriptApp extends JFrame {
         return area;
     }
 
+    //EFFECTS: Produces the string that is representative of the entire transcript object
     private String printTranscript() {
-
         int index = 1;
         String title = ("Your Transcript \n\n");
         String records = "";
@@ -236,10 +249,12 @@ public class TranscriptApp extends JFrame {
         return (title + records);
     }
 
+    //MODIFIES: this
+    //EFFECTS: creates the "Calculate Cumulative" button for the GUI
     public JButton createCumulativeButton() {
         JButton cumulativeButton = new JButton("Calculate Cumulative");
         ActionListener actionListener = e -> { //taken from "Java Programming For Beginners" from Daniel Korig
-            playSound("./src/main/ui/tools/audio/calculateCumulative.wav");
+            playSound("./data/audio/calculateCumulative.wav");
             if (transcript.getCourseList().size() == 0) {
                 textArea.setText("No courses are currently in your transcript. Cumulative GPA was not calculated");
             } else {
@@ -250,9 +265,12 @@ public class TranscriptApp extends JFrame {
         return cumulativeButton;
     }
 
+    //MODIFIES: this
+    //EFFECTS: creates the "Clear Transcript" button for the GUI
     public JButton createClearButton() {
         JButton clearButton = new JButton("Clear Transcript");
         ActionListener actionListener = e -> { //taken from "Java Programming For Beginners" from Daniel Korig
+            playSound("./data/audio/clearTranscript.wav");
             transcript.getCourseList().clear();
             textArea.setText("Your transcript history has been cleared");
             System.out.println("\nYour Transcript is now clear");
@@ -261,20 +279,24 @@ public class TranscriptApp extends JFrame {
         return clearButton;
     }
 
+    //MODIFIES: this
+    //EFFECTS: creates the "Save Transcript" button for the GUI
     public JButton createSaveButton() {
         JButton saveButton = new JButton("Save Transcript");
         ActionListener actionListener = e -> {
-            playSound("./src/main/ui/tools/audio/saveTranscript.wav");
+            playSound("./data/audio/saveTranscript.wav");
             saveCourses();
         };
         saveButton.addActionListener(actionListener);
         return saveButton;
     }
 
+    // MODIFIES: this
+    //EFFECTS: creates the "Load Transcript" button for the GUI
     public JButton createLoadButton() {
         JButton loadButton = new JButton("Load Transcript");
         ActionListener actionListener = e -> {
-            playSound("./src/main/ui/tools/audio/loadTranscript.wav");
+            playSound("./data/audio/loadTranscript.wav");
             loadCourses();
         };
         loadButton.addActionListener(actionListener);
@@ -459,6 +481,8 @@ public class TranscriptApp extends JFrame {
         }
     }
 
+    //EFFECTS: Adds the audio component of the GUI. Plays a .wav file depending on the button pushed
+    //taken from http://suavesnippets.blogspot.com/2011/06/add-sound-on-jbutton-click-in-java.html
     public void playSound(String soundName) {
         try {
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(soundName).getAbsoluteFile());
