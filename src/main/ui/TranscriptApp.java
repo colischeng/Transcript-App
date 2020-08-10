@@ -31,8 +31,8 @@ public class TranscriptApp extends JFrame {
     private JTextField textFieldTarget;
     private JTextField textFieldRemove;
 
-    private static final int WIDTH = 700;
-    private static final int HEIGHT = 700;
+    private static final int WIDTH = 2000;
+    private static final int HEIGHT = 1000;
 
     //EFFECTS: runs transcript application
     public TranscriptApp() {
@@ -229,7 +229,7 @@ public class TranscriptApp extends JFrame {
     // specifications, "displays the Xs that have been added to the Y")
     public JTextArea createTextField() {
         JTextArea area = new JTextArea();
-        area.setPreferredSize(new Dimension(WIDTH, (int) (HEIGHT / 1.5)));
+        area.setPreferredSize(new Dimension((WIDTH / 2), (int) (HEIGHT / 1.5)));
         area.setEditable(false);
         area.setText(printTranscript());
 
