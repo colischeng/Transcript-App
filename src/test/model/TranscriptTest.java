@@ -1,5 +1,6 @@
 package model;
 
+import exceptions.UnattainableException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -45,12 +46,23 @@ class TranscriptTest {
     }
 
     @Test
-    public void targetTest() {
-        assertEquals(-1, testTranscript.target(100));
-        assertEquals(-1, testTranscript.target(100));
-        assertEquals(89, testTranscript.target(85));
-        assertEquals(41, testTranscript.target(79));
-        assertEquals(-1, testTranscript.target(0));
+    public void targetTestNoException() {
+        try {
+            assertEquals(89, testTranscript.target(85));
+            assertEquals(41, testTranscript.target(79));
+        } catch (UnattainableException e) {
+            fail("Unattainable Exception should not have been thrown");
+        }
+    }
+
+    @Test
+    public void targetTestThrowsException() {
+        try {
+            testTranscript.target(100);
+            fail("Unattainable Exception should have been thrown");
+        } catch (UnattainableException e) {
+            // SUCCESS
+        }
     }
 
     @Test

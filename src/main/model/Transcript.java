@@ -1,5 +1,7 @@
 package model;
 
+import exceptions.UnattainableException;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,7 +37,7 @@ public class Transcript {
     // EFFECTS: if target grade is achievable (no negative grades or grades above 100)
     //         - return grade needed in the next 3 credit courses to reach target
     //         - otherwise, return -1
-    public int target(int goal) {
+    public int target(int goal) throws UnattainableException {
         int sum = 0;
         int total = 0;
         for (Course c : courseList) {
@@ -43,10 +45,12 @@ public class Transcript {
             total += (100 * c.getCredits());
         }
         int val = (((goal * (total + 300)) / 100) - sum) / 3;
-        if (0 <= val && val <= 100) {
-            return val;
+        if (0 > val || val > 100) {
+            System.out.println("\nThis GPA is not attainable.");
+            throw new UnattainableException();
         } else {
-            return -1;
+            System.out.println("\nYou need to score " + val + " in your next 3-credit course.");
+            return val;
         }
 
     }

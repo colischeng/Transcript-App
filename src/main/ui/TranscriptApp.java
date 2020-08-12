@@ -1,5 +1,6 @@
 package ui;
 
+import exceptions.UnattainableException;
 import model.Course;
 import model.Transcript;
 import persistence.Reader;
@@ -169,12 +170,14 @@ public class TranscriptApp extends JFrame {
             } catch (Exception exception) {
                 //initialize
             }
-            if (transcript.target(targetField) == -1) {
-                textArea.setText(printTranscript() + "\nThis GPA is not attainable.");
-            } else {
+
+            try {
+                transcript.target(targetField);
                 textArea.setText(
                         printTranscript() + "\nYou need to score " + transcript.target(targetField)
                                 + " in your next 3-credit course.");
+            } catch (UnattainableException unattainableException) {
+                textArea.setText(printTranscript() + "\nThis GPA is not attainable.");
             }
         };
         targetButton.addActionListener(actionListener);
@@ -451,10 +454,11 @@ public class TranscriptApp extends JFrame {
     private void doTarget() {
         System.out.println("\nWhat GPA do you want to achieve through your next 3-credit course?");
         int goal = input.nextInt();
-        if (transcript.target(goal) == -1) {
-            System.out.println("\nThis GPA is not attainable.");
-        } else {
+        try {
+            transcript.target(goal);
             System.out.println("\nYou need to score " + transcript.target(goal) + " in your next 3-credit course.");
+        } catch (UnattainableException e) {
+            System.out.println("\nThis GPA is not attainable.");
         }
 
     }

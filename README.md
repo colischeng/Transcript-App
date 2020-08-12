@@ -27,3 +27,14 @@ range and clicking the button "Remove Course"
 "Add a course".
 - You can save the state of my application by clicking the "Save Transcript" button
 - You can reload the state of my application by clicking the "Load Transcript" button
+
+## Phase 4: Task 2
+
+- *Option 1*: Test and design a class that is robust.  You must have at least one method that throws a checked 
+exception. You must have one test for the case where the exception is expected and another where the exception is not 
+expected.
+    - In the **Transcript Class**, the method **target(int goal)** throws a checked exception called **Unattainable
+     Exception** that is well tested in the **TranscriptTest Class** in **targetTestNoException()** and
+     **targetTestThrowsException()**
+
+ 
