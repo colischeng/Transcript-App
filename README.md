@@ -37,4 +37,8 @@ expected.
      Exception** that is well tested in the **TranscriptTest Class** in **targetTestNoException()** and
      **targetTestThrowsException()**
 
+ ## Phase 4: Task 3
  
+ - *1. Cohesion Improvement*: Created the abstract class *Tool* which is extended by all the tools viewed in the GUI.
+ Originally, all GUI components were housed in the *TranscriptApp* class leading to low readibility. Due to this 
+ improvement, the number of lines of code in *TranscriptApp* was reduced from **511 to 261**   

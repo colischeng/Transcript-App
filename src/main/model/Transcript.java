@@ -1,7 +1,13 @@
 package model;
 
 import exceptions.UnattainableException;
+import persistence.Reader;
+import persistence.Writer;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,6 +16,7 @@ import java.util.List;
 public class Transcript {
 
     private final List<Course> courseList;
+    private static final String COURSES_FILE = "./data/courses.txt";
 
     // EFFECTS: construct new Transcript object
     public Transcript() {
@@ -46,10 +53,8 @@ public class Transcript {
         }
         int val = (((goal * (total + 300)) / 100) - sum) / 3;
         if (0 > val || val > 100) {
-            System.out.println("\nThis GPA is not attainable.");
             throw new UnattainableException();
         } else {
-            System.out.println("\nYou need to score " + val + " in your next 3-credit course.");
             return val;
         }
 
@@ -74,4 +79,48 @@ public class Transcript {
         return courseList;
     }
 
+    // EFFECTS: saves state of transcripts to COURSES_FILE
+    public void saveCourses() {
+        try {
+            Writer writer = new Writer(new File(COURSES_FILE));
+            for (Course c : this.getCourseList()) {
+                writer.write(c);
+            }
+            writer.close();
+            System.out.println("Courses saved to file " + COURSES_FILE);
+        } catch (FileNotFoundException e) {
+            System.out.println("Unable to save transcript to " + COURSES_FILE);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            // this is due to a programming error
+        }
+    }
+
+    // MODIFIES: this
+    // EFFECTS: loads courses from COURSES_FILE, if that file exists;
+    // otherwise initializes transcript with empty transcript
+    public void loadCourses() {
+        try {
+            List<Course> courses = Reader.readCourses(new File(COURSES_FILE));
+            if (courses.size() == 0) {
+                System.out.println("No past transcript exists. No courses have been loaded.");
+            } else {
+                this.getCourseList().clear();
+                for (Course c : courses) {
+                    this.addCourse(c);
+                }
+                System.out.println("Courses loaded from " + COURSES_FILE + "\n");
+                int index = 1;
+                System.out.println("Your Transcript \n");
+                for (Course c : this.getCourseList()) {
+                    String indexString = (index + ". ");
+                    System.out.println(indexString + c.toString());
+                    index++;
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Unable to load transcript to " + COURSES_FILE);
+        }
+
+    }
 }

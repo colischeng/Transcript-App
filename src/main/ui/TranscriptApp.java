@@ -3,25 +3,17 @@ package ui;
 import exceptions.UnattainableException;
 import model.Course;
 import model.Transcript;
-import persistence.Reader;
-import persistence.Writer;
+import ui.tools.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionListener;
-import java.io.*;
-import java.util.List;
 import java.util.Scanner;
-
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.AudioSystem;
 
 // Represents the instantiated transcript app class
 
 public class TranscriptApp extends JFrame {
     private static final String COURSES_FILE = "./data/courses.txt";
-    private Transcript transcript = new Transcript();
+    private Transcript transcript;
     private Scanner input;
     private JTextArea textArea;
 
@@ -50,10 +42,16 @@ public class TranscriptApp extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(WIDTH, HEIGHT);
 
-        panel.add(methodsPanel());
-
+        transcript = new Transcript();
         textArea = createTextField();
+        textFieldCourseType = null;
+        textFieldCourseNumber = null;
+        textFieldGrade = null;
+        textFieldCredits = null;
+        textFieldTarget = null;
+        textFieldRemove = null;
 
+        panel.add(methodsPanel());
         panel.add(textArea);
 
         add(panel);
@@ -65,178 +63,52 @@ public class TranscriptApp extends JFrame {
     private JPanel methodsPanel() {
         JPanel mainPanel = new JPanel();
         setLayout(new FlowLayout());
-
-        mainPanel.add(createAddFields());
-
-        JPanel oneFieldPanel = new JPanel();
-        oneFieldPanel.setLayout(new BoxLayout(oneFieldPanel, BoxLayout.Y_AXIS));
-        oneFieldPanel.add(createTargetFields());
-        oneFieldPanel.add(createRemovalFields());
-
-        JPanel buttonsOnlyPanel = new JPanel();
-        buttonsOnlyPanel.setLayout(new BoxLayout(buttonsOnlyPanel, BoxLayout.Y_AXIS));
-        buttonsOnlyPanel.add(createCumulativeButton());
-        buttonsOnlyPanel.add(createClearButton());
-        buttonsOnlyPanel.add(createSaveButton());
-        buttonsOnlyPanel.add(createLoadButton());
-
-        mainPanel.add(oneFieldPanel);
-        mainPanel.add(buttonsOnlyPanel);
-
+        AddTool addButton = new AddTool("Add A Course Transcript","./data/audio/addACourse.wav",
+                this.transcript, this.textArea, textFieldCourseType, textFieldCourseNumber, textFieldGrade,
+                textFieldCredits, null,null);
+        mainPanel.add(addButton.createAddFields());
+        mainPanel.add(oneFieldPanel());
+        mainPanel.add(buttonsOnlyPanel());
         mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-
         return mainPanel;
     }
 
-    //EFFECTS: creates the "Add a course" panel (with fields) for the GUI
-    private JPanel createAddFields() {
-        JPanel addCoursePanel = new JPanel();
-        addCoursePanel.setLayout(new BoxLayout(addCoursePanel, BoxLayout.Y_AXIS));
-
-        JPanel typePanel = questionPanels("What is the course type?", "");
-        JPanel numberPanel = questionPanels("What is the course number?", "");
-        JPanel gradePanel = questionPanels("What was your grade in the course?", "");
-        JPanel creditPanel = questionPanels("How many credits was this course worth?", "");
-
-        textFieldCourseType = ((JTextField) typePanel.getComponent(1));
-        textFieldCourseNumber = ((JTextField) numberPanel.getComponent(1));
-        textFieldGrade = ((JTextField) gradePanel.getComponent(1));
-        textFieldCredits = ((JTextField) creditPanel.getComponent(1));
-
-        JButton addButton = createAddButton();
-
-        addCoursePanel.add(typePanel);
-        addCoursePanel.add(numberPanel);
-        addCoursePanel.add(gradePanel);
-        addCoursePanel.add(creditPanel);
-        addCoursePanel.add(addButton);
-        return addCoursePanel;
+    private JPanel oneFieldPanel() {
+        JPanel oneFieldPanel = new JPanel();
+        TargetTool targetButton = new TargetTool("Calculate target GPA",
+                "./data/audio/calculateTargetGPA.wav", this.transcript, this.textArea,null,
+                null,null,null,this.textFieldTarget,null);
+        RemoveTool removeButton = new RemoveTool("Remove a course","./data/audio/removeCourse.wav",
+                this.transcript, this.textArea,null,null,null,null,
+                null, this.textFieldRemove);
+        oneFieldPanel.setLayout(new BoxLayout(oneFieldPanel, BoxLayout.Y_AXIS));
+        oneFieldPanel.add(targetButton.createTargetFields());
+        oneFieldPanel.add(removeButton.createRemovalFields());
+        return oneFieldPanel;
     }
 
-    //MODIFIES: this
-    //EFFECTS: creates the "Add a course" button for the "Add a course" panel for the GUI
-    public JButton createAddButton() {
-        JButton addButton = new JButton("Add a Course");
-        ActionListener actionListener = e -> {
-            playSound("./data/audio/addACourse.wav");
-            String courseType = "";
-            int courseNumber = 0;
-            int courseGrade = 0;
-            int courseCredits = 0;
-            try {
-                courseType = (textFieldCourseType.getText());
-                courseNumber = Integer.parseInt(textFieldCourseNumber.getText());
-                courseGrade = Integer.parseInt(textFieldGrade.getText());
-                courseCredits = Integer.parseInt(textFieldCredits.getText());
-            } catch (Exception exception) {
-                textArea.setText(printTranscript() + "\nAn error has occurred and no courses were added.");
-            }
-            Course course = new Course(courseType, courseNumber, courseGrade, courseCredits);
-            transcript.addCourse(course);
-            textArea.setText(printTranscript()
-                    + "\n" + courseType + " " + courseNumber + " has been added to your transcript\n");
-            System.out.println(courseType + " " + courseNumber + " has been added to your transcript\n");
-        };
-        addButton.addActionListener(actionListener);
-        return addButton;
+    private JPanel buttonsOnlyPanel() {
+        JPanel buttonsOnlyPanel = new JPanel();
+        CumulativeTool cumulativeButton = new CumulativeTool("Calculate Cumulative",
+                "./data/audio/calculateCumulative.wav", this.transcript, this.textArea, null,
+                null, null,null,null,null);
+        ClearTool clearButton = new ClearTool("Clear View","./data/audio/clearTranscript.wav",
+                this.transcript, this.textArea,null,null,null,null, null,
+                null);
+        SaveTool saveButton = new SaveTool("Save Transcript","./data/audio/saveTranscript.wav",
+                this.transcript, this.textArea,null,null,null,null, null,
+                null);
+        LoadTool loadButton = new LoadTool("Load Transcript","./data/audio/loadTranscript.wav",
+                this.transcript, this.textArea,null,null,null,null, null,
+                null);
+        buttonsOnlyPanel.setLayout(new BoxLayout(buttonsOnlyPanel, BoxLayout.Y_AXIS));
+        buttonsOnlyPanel.add(cumulativeButton.getButton());
+        buttonsOnlyPanel.add(clearButton.getButton());
+        buttonsOnlyPanel.add(saveButton.getButton());
+        buttonsOnlyPanel.add(loadButton.getButton());
+        return buttonsOnlyPanel;
     }
 
-    //EFFECTS: creates the "Calculate Target" panel (with fields) for the GUI
-    private JPanel createTargetFields() {
-        JPanel targetPanel = new JPanel();
-        targetPanel.setLayout(new BoxLayout(targetPanel, BoxLayout.Y_AXIS));
-
-        JPanel questionPanel =
-                questionPanels("What GPA do you want to achieve with your next 3-credit course?", "");
-
-        textFieldTarget = ((JTextField) questionPanel.getComponent(1));
-
-        JButton targetButton = createTargetButton();
-
-        targetPanel.add(questionPanel);
-        targetPanel.add(targetButton);
-        return targetPanel;
-    }
-
-    //EFFECTS: creates the "Calculate target" button for the "Calculate target" panel for the GUI
-    private JButton createTargetButton() {
-        JButton targetButton = new JButton("Calculate Target GPA");
-        ActionListener actionListener = e -> {
-            playSound("./data/audio/calculateTargetGPA.wav");
-            String response = textFieldTarget.getText();
-            int targetField = 0;
-            try {
-                targetField = Integer.parseInt(response);
-            } catch (Exception exception) {
-                //initialize
-            }
-
-            try {
-                transcript.target(targetField);
-                textArea.setText(
-                        printTranscript() + "\nYou need to score " + transcript.target(targetField)
-                                + " in your next 3-credit course.");
-            } catch (UnattainableException unattainableException) {
-                textArea.setText(printTranscript() + "\nThis GPA is not attainable.");
-            }
-        };
-        targetButton.addActionListener(actionListener);
-        return targetButton;
-    }
-
-    //MODIFIES: this
-    //EFFECTS: creates the "Remove course" panel (with fields) for the GUI
-    private JPanel createRemovalFields() {
-        JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-
-        JPanel remove = questionPanels("Which nth course on your transcript do you want to remove?", "");
-
-        textFieldRemove = ((JTextField) remove.getComponent(1));
-
-        JButton removeButton = createRemoveButton();
-
-        panel.add(remove);
-        panel.add(removeButton);
-        return panel;
-    }
-
-    //MODIFIES: this
-    //EFFECTS: creates the "Remove course" button for the "Remove course" panel for the GUI
-    public JButton createRemoveButton() {
-        JButton removeButton = new JButton("Remove Course");
-        ActionListener actionListener = e -> {
-            playSound("./data/audio/removeCourse.wav");
-            String response = textFieldRemove.getText();
-            int removeField;
-            try {
-                removeField = Integer.parseInt(response);
-                transcript.getCourseList().remove(removeField - 1);
-                textArea.setText(
-                        printTranscript() + "\nThe course at index " + removeField + " was removed");
-            } catch (Exception exception) {
-                textArea.setText(printTranscript()
-                        + "\nAn error occurred and no courses were removed. Check that your index is within range.");
-            }
-
-
-        };
-        removeButton.addActionListener(actionListener);
-        return removeButton;
-    }
-
-    //EFFECTS: Abstract method that creates panels that have editable text fields (Add, Target, Remove functionalities)
-    public JPanel questionPanels(String label, String question) {
-        JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        JLabel prompt = new JLabel(label);
-        JTextField field = new JTextField(question);
-        field.setPreferredSize(new Dimension(10, 22));
-
-        panel.add(prompt,0);
-        panel.add(field,1);
-        return panel;
-    }
 
     //EFFECTS: Places the transcript area onto the GUI (the part of the GUI that, according to the project
     // specifications, "displays the Xs that have been added to the Y")
@@ -245,7 +117,6 @@ public class TranscriptApp extends JFrame {
         area.setPreferredSize(new Dimension((WIDTH / 2), (int) (HEIGHT / 1.5)));
         area.setEditable(false);
         area.setText(printTranscript());
-
         return area;
     }
 
@@ -262,59 +133,6 @@ public class TranscriptApp extends JFrame {
         return (title + records);
     }
 
-    //MODIFIES: this
-    //EFFECTS: creates the "Calculate Cumulative" button for the GUI
-    public JButton createCumulativeButton() {
-        JButton cumulativeButton = new JButton("Calculate Cumulative");
-        ActionListener actionListener = e -> { //taken from "Java Programming For Beginners" from Daniel Korig
-            playSound("./data/audio/calculateCumulative.wav");
-            if (transcript.getCourseList().size() == 0) {
-                textArea.setText("No courses are currently in your transcript. Cumulative GPA was not calculated");
-            } else {
-                textArea.setText(printTranscript() + "\nYour cumulative GPA is " + transcript.cumulativeGPA());
-            }
-        };
-        cumulativeButton.addActionListener(actionListener);
-        return cumulativeButton;
-    }
-
-    //MODIFIES: this
-    //EFFECTS: creates the "Clear Transcript" button for the GUI
-    public JButton createClearButton() {
-        JButton clearButton = new JButton("Clear Transcript");
-        ActionListener actionListener = e -> { //taken from "Java Programming For Beginners" from Daniel Korig
-            playSound("./data/audio/clearTranscript.wav");
-            transcript.getCourseList().clear();
-            textArea.setText("Your transcript history has been cleared");
-            System.out.println("\nYour Transcript is now clear");
-        };
-        clearButton.addActionListener(actionListener);
-        return clearButton;
-    }
-
-    //MODIFIES: this
-    //EFFECTS: creates the "Save Transcript" button for the GUI
-    public JButton createSaveButton() {
-        JButton saveButton = new JButton("Save Transcript");
-        ActionListener actionListener = e -> {
-            playSound("./data/audio/saveTranscript.wav");
-            saveCourses();
-        };
-        saveButton.addActionListener(actionListener);
-        return saveButton;
-    }
-
-    // MODIFIES: this
-    //EFFECTS: creates the "Load Transcript" button for the GUI
-    public JButton createLoadButton() {
-        JButton loadButton = new JButton("Load Transcript");
-        ActionListener actionListener = e -> {
-            playSound("./data/audio/loadTranscript.wav");
-            loadCourses();
-        };
-        loadButton.addActionListener(actionListener);
-        return loadButton;
-    }
 
     // MODIFIES: this
     // EFFECTS: processes user input
@@ -337,60 +155,6 @@ public class TranscriptApp extends JFrame {
 
         System.out.println("\nGoodbye!");
     }
-
-    // MODIFIES: this
-    // EFFECTS: loads courses from COURSES_FILE, if that file exists;
-    // otherwise initializes transcript with empty transcript
-    private void loadCourses() {
-        try {
-            List<Course> courses = Reader.readCourses(new File(COURSES_FILE));
-            if (courses.size() == 0) {
-                System.out.println("No past transcript exists. No courses have been loaded.");
-            } else {
-                transcript.getCourseList().clear();
-                for (Course c : courses) {
-                    transcript.addCourse(c);
-                }
-                System.out.println("Courses loaded from " + COURSES_FILE + "\n");
-                doPrint();
-                createTextField();
-            }
-            if (courses.size() == 0) {
-                textArea.setText("No past transcript exists. No courses have been loaded.");
-            } else {
-                textArea.setText(printTranscript() + "\nCourses loaded from " + COURSES_FILE + "\n");
-            }
-        } catch (IOException e) {
-            textArea.setText("Unable to load transcript to " + COURSES_FILE);
-            init();
-        }
-    }
-
-    // EFFECTS: saves state of transcripts to COURSES_FILE
-    private void saveCourses() {
-        try {
-            Writer writer = new Writer(new File(COURSES_FILE));
-            for (Course c : transcript.getCourseList()) {
-                writer.write(c);
-            }
-            writer.close();
-            textArea.setText(printTranscript() + "\nCourses saved to file" + COURSES_FILE);
-            System.out.println("Courses saved to file " + COURSES_FILE);
-        } catch (FileNotFoundException e) {
-            textArea.setText("Unable to save transcript to " + COURSES_FILE);
-            System.out.println("Unable to save transcript to " + COURSES_FILE);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-            // this is due to a programming error
-        }
-    }
-
-    // MODIFIES: this
-    // EFFECTS: initializes transcript
-    private void init() {
-        transcript = new Transcript();
-    }
-
 
     // EFFECTS: displays menu of options to user
     private void displayMenu() {   // similarly adapted from the TellerApp
@@ -417,9 +181,9 @@ public class TranscriptApp extends JFrame {
         } else if (command.equals("r")) {
             doRemove();
         } else if (command.equals("s")) {
-            saveCourses();
+            this.transcript.saveCourses();
         } else if (command.equals("l")) {
-            loadCourses();
+            this.transcript.loadCourses();
         } else if (command.equals("p")) {
             doPrint();
         } else {
@@ -492,20 +256,6 @@ public class TranscriptApp extends JFrame {
                 System.out.println(indexString + c.toString());
                 index++;
             }
-        }
-    }
-
-    //EFFECTS: Adds the audio component of the GUI. Plays a .wav file depending on the button pushed
-    //taken from http://suavesnippets.blogspot.com/2011/06/add-sound-on-jbutton-click-in-java.html
-    public void playSound(String soundName) {
-        try {
-            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(soundName).getAbsoluteFile());
-            Clip clip = AudioSystem.getClip();
-            clip.open(audioInputStream);
-            clip.start();
-        } catch (Exception ex) {
-            System.out.println("Error with playing sound.");
-            ex.printStackTrace();
         }
     }
 }
