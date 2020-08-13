@@ -1,7 +1,7 @@
 package ui.tools;
 
 import exceptions.UnattainableException;
-import model.Transcript;
+import ui.TranscriptApp;
 
 import javax.swing.*;
 
@@ -9,18 +9,18 @@ import javax.swing.*;
 public class TargetTool extends Tool {
 
     //EFFECTS: construct new TargetTool object
-    public TargetTool(String label, String soundLocation, Transcript transcript, JTextArea textArea,
+    public TargetTool(String label, String soundLocation, TranscriptApp transcriptApp, JTextArea textArea,
                       JTextField courseType, JTextField courseNumber, JTextField grade, JTextField credits,
                       JTextField target, JTextField remove) {
-        super(label, soundLocation, transcript, textArea, courseType, courseNumber, grade, credits, target, remove);
+        super(label, soundLocation, transcriptApp, textArea, courseType, courseNumber, grade, credits, target, remove);
     }
 
     //MODIFIES: this
     //EFFECTS: Calculate a target GPA based on the fields that have been filled in by the use and then change the
     // textField
     @Override
-    public void doAction(Transcript transcript, JTextArea textArea, JTextField courseType, JTextField courseNumber,
-                         JTextField grade, JTextField credits, JTextField target, JTextField remove) {
+    public void doAction(TranscriptApp transcriptApp, JTextArea textArea, JTextField courseType, JTextField
+            courseNumber, JTextField grade, JTextField credits, JTextField target, JTextField remove) {
         String response = target.getText();
         int targetField = 0;
         try {
@@ -30,9 +30,9 @@ public class TargetTool extends Tool {
         }
 
         try {
-            transcript.target(targetField);
+            transcriptApp.getTranscript().target(targetField);
             textArea.setText(
-                    printTranscript() + "\nYou need to score " + transcript.target(targetField)
+                    printTranscript() + "\nYou need to score " + transcriptApp.getTranscript().target(targetField)
                             + " in your next 3-credit course.");
         } catch (UnattainableException unattainableException) {
             textArea.setText(printTranscript() + "\nThis GPA is not attainable.");
@@ -49,7 +49,7 @@ public class TargetTool extends Tool {
 
         target = ((JTextField) questionPanel.getComponent(1));
 
-        TargetTool targetButton = new TargetTool(this.label, this.soundLocation, this.transcript, this.textArea,
+        TargetTool targetButton = new TargetTool(this.label, this.soundLocation, this.transcriptApp, this.textArea,
                 this.courseType, this.courseNumber, this.grade, this.credits, this.target, this.remove);
 
         targetPanel.add(questionPanel);

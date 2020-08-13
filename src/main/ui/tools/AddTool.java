@@ -1,7 +1,7 @@
 package ui.tools;
 
 import model.Course;
-import model.Transcript;
+import ui.TranscriptApp;
 
 import javax.swing.*;
 
@@ -9,18 +9,19 @@ import javax.swing.*;
 public class AddTool extends Tool {
 
     //EFFECTS: construct new AddTool object
-    public AddTool(String label, String soundLocation, Transcript transcript, JTextArea textArea,
+    public AddTool(String label, String soundLocation, TranscriptApp transcriptApp, JTextArea textArea,
                    JTextField courseType, JTextField courseNumber, JTextField grade, JTextField credits,
                    JTextField target, JTextField remove) {
-        super(label, soundLocation, transcript, textArea, courseType, courseNumber, grade, credits, target, remove);
+        super(label, soundLocation, transcriptApp, textArea, courseType, courseNumber, grade, credits, target, remove);
     }
 
     //MODIFIES: this
     //EFFECTS: Adds a course to the transcript object based on the fields that have been filled in by the use and then
     // change the textField
     @Override
-    public void doAction(Transcript transcript, JTextArea textArea, JTextField courseType, JTextField courseNumber,
-                         JTextField grade, JTextField credits, JTextField target, JTextField remove)  {
+    public void doAction(TranscriptApp transcriptApp, JTextArea textArea, JTextField courseType,
+                         JTextField courseNumber, JTextField grade, JTextField credits, JTextField target, JTextField
+                                     remove)  {
         String initialCourseType = "";
         int initialCourseNumber = 0;
         int initialCourseGrade = 0;
@@ -34,7 +35,7 @@ public class AddTool extends Tool {
             textArea.setText(printTranscript() + "\nAn error has occurred and no courses were added.");
         }
         Course course = new Course(initialCourseType, initialCourseNumber, initialCourseGrade, initialCourseCredits);
-        transcript.addCourse(course);
+        transcriptApp.getTranscript().addCourse(course);
         textArea.setText(printTranscript()
                 + "\n" + initialCourseType + " " + initialCourseNumber + " has been added to your transcript\n");
         System.out.println(initialCourseType + " " + initialCourseNumber + " has been added to your transcript\n");
@@ -55,8 +56,8 @@ public class AddTool extends Tool {
         grade = ((JTextField) gradePanel.getComponent(1));
         credits = ((JTextField) creditPanel.getComponent(1));
 
-        AddTool addButton = new AddTool(this.label, this.soundLocation, this.transcript, this.textArea, this.courseType,
-                this.courseNumber, this.grade, this.credits, this.target, this.remove);
+        AddTool addButton = new AddTool(this.label, this.soundLocation, this.transcriptApp, this.textArea,
+                this.courseType, this.courseNumber, this.grade, this.credits, this.target, this.remove);
 
         addCoursePanel.add(typePanel);
         addCoursePanel.add(numberPanel);

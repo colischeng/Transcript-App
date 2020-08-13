@@ -1,7 +1,7 @@
 package ui.tools;
 
 import model.Course;
-import model.Transcript;
+import ui.TranscriptApp;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -15,7 +15,7 @@ import java.io.File;
 public abstract class Tool {
     protected String label;
     protected String soundLocation;
-    protected Transcript transcript;
+    protected TranscriptApp transcriptApp;
     protected JTextArea textArea;
     protected JButton button;
     protected JTextField courseType;
@@ -26,11 +26,12 @@ public abstract class Tool {
     protected JTextField remove;
 
     //EFFECTS: construct new Tool object
-    public Tool(String label, String soundLocation, Transcript transcript, JTextArea textArea, JTextField courseType,
-                JTextField courseNumber, JTextField grade, JTextField credits, JTextField target, JTextField remove) {
+    public Tool(String label, String soundLocation, TranscriptApp transcriptApp, JTextArea textArea, JTextField
+            courseType, JTextField courseNumber, JTextField grade, JTextField credits, JTextField target, JTextField
+            remove) {
         this.label = label;
         this.soundLocation = soundLocation;
-        this.transcript = transcript;
+        this.transcriptApp = transcriptApp;
         this.textArea = textArea;
         this.courseType = courseType;
         this.courseNumber = courseNumber;
@@ -41,7 +42,7 @@ public abstract class Tool {
         JButton button = new JButton(label);
         ActionListener actionListener = e -> { //taken from "Java Programming For Beginners" from Daniel Korig
             playSound(this.soundLocation);
-            doAction(this.transcript, this.textArea, this.courseType, this.courseNumber, this.grade, this.credits,
+            doAction(this.transcriptApp, this.textArea, this.courseType, this.courseNumber, this.grade, this.credits,
                     this.target, this.remove);
         };
         button.addActionListener(actionListener);
@@ -49,7 +50,7 @@ public abstract class Tool {
     }
 
     //EFFECTS: Abstraction function that represents the actions taken by a panel
-    public abstract void doAction(Transcript transcript, JTextArea textArea, JTextField courseType,
+    public abstract void doAction(TranscriptApp transcriptApp, JTextArea textArea, JTextField courseType,
                                   JTextField courseNumber, JTextField grade, JTextField credits, JTextField target,
                                   JTextField remove);
 
@@ -77,7 +78,7 @@ public abstract class Tool {
         int index = 1;
         String title = ("Your Transcript \n\n");
         String records = "";
-        for (Course c : this.transcript.getCourseList()) {
+        for (Course c : this.transcriptApp.getTranscript().getCourseList()) {
             String indexString = (index + ". ");
             records = (records + indexString + c.toString() + "\n");
             index++;

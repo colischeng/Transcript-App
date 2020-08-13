@@ -44,10 +44,15 @@ expected.
 course, saving a transcript, and calculating a target grade are not functions that should be implemented in the
 same class that handles the GUI. Thus, the *TranscriptApp* class exhibited very low cohesion. It would make sense
 to move the logic of these tools into a different class. These panels all share some commonality, so abstraction could
- be used.
+ be used. In my first iteration of this, the *Transcript* class also exhibited a coupling issue which is further 
+ explained below. 
 - *1. Cohesion Improvement*: Removed the methods *createAddFields()* and  *createAddButton()* in the *TranscriptApp*
-  class (along with their accompanying fields) and created the class *AddTool* that extends the abstract class *Tool* 
-  that handles all the functionality of adding courses in the GUI
-- *2. Cohesion Improvement*: Removed the method *createCumulativeButton()* in the *TranscriptApp* class and created the
- class *CumulativeTool* that extends the abstract class *Tool* that handles all the functionality of calculating the
-  cumulative GPA in the GUI
+  class (along with their accompanying fields) from Phase 3, and created the class *AddTool* (that extends the abstract 
+  class *Tool* that handles all the functionality of adding courses in the GUI). This was a cohesion improvement, as 
+  the *TranscriptApp* class was becoming too cluttered and handling too many functionalities at once.
+- *2. Coupling Improvement*: In creating the abstract class *Tool* to fix the cohesion problem stated earlier, I had
+inadvertently created a coupling issue. The original design of my abstract class *Tool* had an association 
+(of multiplicity 1) to the class *Transcript*. However, the *TranscriptApp* class also had an association with 
+*Transcript* as well, meaning that an issue in the *Transcript* class would break both the *TranscriptApp* class and
+ *Tool* class (and perhaps any class that extended off this). To fix this coupling issue, I changed *Tool*'s association 
+ to *Transcript* to instead be an association to *TranscriptApp*.

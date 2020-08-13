@@ -1,8 +1,8 @@
 package ui.tools;
 
 import model.Course;
-import model.Transcript;
 import persistence.Reader;
+import ui.TranscriptApp;
 
 import javax.swing.*;
 import java.io.File;
@@ -14,17 +14,17 @@ public class LoadTool extends Tool {
     private static final String COURSES_FILE = "./data/courses.txt";
 
     //EFFECTS: construct new LoadTool object
-    public LoadTool(String label, String soundLocation, Transcript transcript, JTextArea textArea,
+    public LoadTool(String label, String soundLocation, TranscriptApp transcriptApp, JTextArea textArea,
                     JTextField courseType, JTextField courseNumber, JTextField grade, JTextField credits,
                     JTextField target, JTextField remove) {
-        super(label, soundLocation, transcript, textArea, courseType, courseNumber, grade, credits, target, remove);
+        super(label, soundLocation, transcriptApp, textArea, courseType, courseNumber, grade, credits, target, remove);
     }
 
     //MODIFIES: this
     //EFFECTS: Load a previously saved transcript and then change the textField
     @Override
-    public void doAction(Transcript transcript, JTextArea textArea, JTextField courseType, JTextField courseNumber,
-                         JTextField grade, JTextField credits, JTextField target, JTextField remove) {
+    public void doAction(TranscriptApp transcriptApp, JTextArea textArea, JTextField courseType, JTextField
+            courseNumber, JTextField grade, JTextField credits, JTextField target, JTextField remove) {
         try {
             loadCourses();
             textArea.setText(printTranscript() + "\nCourses loaded from" + COURSES_FILE);
@@ -44,14 +44,14 @@ public class LoadTool extends Tool {
                 System.out.println("No past transcript exists. No courses have been loaded.");
                 textArea.setText("No past transcript exists. No courses have been loaded.");
             } else {
-                transcript.getCourseList().clear();
+                transcriptApp.getTranscript().getCourseList().clear();
                 for (Course c : courses) {
-                    transcript.addCourse(c);
+                    transcriptApp.getTranscript().addCourse(c);
                 }
                 System.out.println("Courses loaded from " + COURSES_FILE + "\n");
                 int index = 1;
                 System.out.println("Your Transcript \n");
-                for (Course c : transcript.getCourseList()) {
+                for (Course c : transcriptApp.getTranscript().getCourseList()) {
                     String indexString = (index + ". ");
                     System.out.println(indexString + c.toString());
                     index++;

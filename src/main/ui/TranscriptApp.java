@@ -70,7 +70,7 @@ public class TranscriptApp extends JFrame {
         JPanel mainPanel = new JPanel();
         setLayout(new FlowLayout());
         AddTool addButton = new AddTool("Add A Course","./data/audio/addACourse.wav",
-                this.transcript, this.textArea, textFieldCourseType, textFieldCourseNumber, textFieldGrade,
+                this, this.textArea, textFieldCourseType, textFieldCourseNumber, textFieldGrade,
                 textFieldCredits, null,null);
         mainPanel.add(addButton.createAddFields());
         mainPanel.add(oneFieldPanel());
@@ -83,10 +83,10 @@ public class TranscriptApp extends JFrame {
     private JPanel oneFieldPanel() {
         JPanel oneFieldPanel = new JPanel();
         TargetTool targetButton = new TargetTool("Calculate target GPA",
-                "./data/audio/calculateTargetGPA.wav", this.transcript, this.textArea,null,
+                "./data/audio/calculateTargetGPA.wav", this, this.textArea,null,
                 null,null,null,this.textFieldTarget,null);
         RemoveTool removeButton = new RemoveTool("Remove a course","./data/audio/removeCourse.wav",
-                this.transcript, this.textArea,null,null,null,null,
+                this, this.textArea,null,null,null,null,
                 null, this.textFieldRemove);
         oneFieldPanel.setLayout(new BoxLayout(oneFieldPanel, BoxLayout.Y_AXIS));
         oneFieldPanel.add(targetButton.createTargetFields());
@@ -99,16 +99,16 @@ public class TranscriptApp extends JFrame {
     private JPanel buttonsOnlyPanel() {
         JPanel buttonsOnlyPanel = new JPanel();
         CumulativeTool cumulativeButton = new CumulativeTool("Calculate Cumulative",
-                "./data/audio/calculateCumulative.wav", this.transcript, this.textArea, null,
+                "./data/audio/calculateCumulative.wav", this, this.textArea, null,
                 null, null,null,null,null);
         ClearTool clearButton = new ClearTool("Clear View","./data/audio/clearTranscript.wav",
-                this.transcript, this.textArea,null,null,null,null, null,
+                this, this.textArea,null,null,null,null, null,
                 null);
         SaveTool saveButton = new SaveTool("Save Transcript","./data/audio/saveTranscript.wav",
-                this.transcript, this.textArea,null,null,null,null, null,
+                this, this.textArea,null,null,null,null, null,
                 null);
         LoadTool loadButton = new LoadTool("Load Transcript","./data/audio/loadTranscript.wav",
-                this.transcript, this.textArea,null,null,null,null, null,
+                this, this.textArea,null,null,null,null, null,
                 null);
         buttonsOnlyPanel.setLayout(new BoxLayout(buttonsOnlyPanel, BoxLayout.Y_AXIS));
         buttonsOnlyPanel.add(cumulativeButton.getButton());
@@ -312,6 +312,10 @@ public class TranscriptApp extends JFrame {
         } catch (IOException e) {
             System.out.println("Unable to load transcript to " + COURSES_FILE);
         }
+    }
+
+    public Transcript getTranscript() {
+        return transcript;
     }
 
 }

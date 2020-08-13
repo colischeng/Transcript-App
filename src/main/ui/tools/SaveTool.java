@@ -1,8 +1,8 @@
 package ui.tools;
 
 import model.Course;
-import model.Transcript;
 import persistence.Writer;
+import ui.TranscriptApp;
 
 import javax.swing.*;
 import java.io.File;
@@ -15,17 +15,17 @@ public class SaveTool extends Tool {
     //EFFECTS: construct new SaveTool object
     private static final String COURSES_FILE = "./data/courses.txt";
 
-    public SaveTool(String label, String soundLocation, Transcript transcript, JTextArea textArea,
+    public SaveTool(String label, String soundLocation, TranscriptApp transcriptApp, JTextArea textArea,
                     JTextField courseType, JTextField courseNumber, JTextField grade, JTextField credits,
                     JTextField target, JTextField remove) {
-        super(label, soundLocation, transcript, textArea, courseType, courseNumber, grade, credits, target, remove);
+        super(label, soundLocation, transcriptApp, textArea, courseType, courseNumber, grade, credits, target, remove);
     }
 
     //MODIFIES: this
     //EFFECTS: Save a transcript object and then change the textField
     @Override
-    public void doAction(Transcript transcript, JTextArea textArea, JTextField courseType, JTextField courseNumber,
-                         JTextField grade, JTextField credits, JTextField target, JTextField remove) {
+    public void doAction(TranscriptApp transcriptApp, JTextArea textArea, JTextField courseType, JTextField
+            courseNumber, JTextField grade, JTextField credits, JTextField target, JTextField remove) {
         try {
             saveCourses();
             textArea.setText(printTranscript() + "\nCourses saved to file" + COURSES_FILE);
@@ -38,7 +38,7 @@ public class SaveTool extends Tool {
     public void saveCourses() {
         try {
             Writer writer = new Writer(new File(COURSES_FILE));
-            for (Course c : transcript.getCourseList()) {
+            for (Course c : transcriptApp.getTranscript().getCourseList()) {
                 writer.write(c);
             }
             writer.close();
