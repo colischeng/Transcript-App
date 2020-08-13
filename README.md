@@ -33,12 +33,20 @@ range and clicking the button "Remove Course"
 - *Option 1*: Test and design a class that is robust.  You must have at least one method that throws a checked 
 exception. You must have one test for the case where the exception is expected and another where the exception is not 
 expected.
-    - In the **Transcript Class**, the method **target(int goal)** throws a checked exception called **Unattainable
-     Exception** that is well tested in the **TranscriptTest Class** in **targetTestNoException()** and
-     **targetTestThrowsException()**
+    - In the **Transcript**  Class, the method **target(int goal)** throws a checked exception called 
+    **UnattainableException** that is well tested in the **TranscriptTest** Class through **targetTestNoException()**
+     and **targetTestThrowsException()** in the **TranscriptTest** class
 
  ## Phase 4: Task 3
- 
- - *1. Cohesion Improvement*: Created the abstract class *Tool* which is extended by all the tools viewed in the GUI.
- Originally, all GUI components were housed in the *TranscriptApp* class leading to low readibility. Due to this 
- improvement, the number of lines of code in *TranscriptApp* was reduced from **511 to 261**   
+
+- All problems: Adding a course, clearing a transcript, calculating the target GPA, loading a transcript, removing a 
+course, saving a transcript, and calculating a target grade are not functions that should be implemented in the
+same class that handles the GUI. Thus, the *TranscriptApp* class exhibited very low cohesion. It would make sense
+to move the logic of these tools into a different class. These panels all share some commonality, so abstraction could
+ be used.
+- *1. Cohesion Improvement*: Removed the methods *createAddFields()* and  *createAddButton()* in the *TranscriptApp*
+  class (along with their accompanying fields) and created the class *AddTool* that extends the abstract class *Tool* 
+  that handles all the functionality of adding courses in the GUI
+- *2. Cohesion Improvement*: Removed the method *createCumulativeButton()* in the *TranscriptApp* class and created the
+ class *CumulativeTool* that extends the abstract class *Tool* that handles all the functionality of calculating the
+  cumulative GPA in the GUI

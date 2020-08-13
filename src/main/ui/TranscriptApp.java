@@ -3,14 +3,20 @@ package ui;
 import exceptions.UnattainableException;
 import model.Course;
 import model.Transcript;
+import persistence.Reader;
+import persistence.Writer;
 import ui.tools.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.util.List;
 import java.util.Scanner;
 
 // Represents the instantiated transcript app class
-
 public class TranscriptApp extends JFrame {
     private static final String COURSES_FILE = "./data/courses.txt";
     private Transcript transcript;
@@ -58,12 +64,12 @@ public class TranscriptApp extends JFrame {
         setVisible(true);
     }
 
-    //EFFECTS: adds the "Add A Course", "Calculate Cumulative", "Calculate Target", "Remove Course", "Clear Transcript",
-    // "Save Transcript", "Load Transcript", panels/buttons onto the GUI
+    //EFFECTS: Returns a panel with the "Add A Course", "Calculate Cumulative", "Calculate Target", "Remove Course",
+    // "Clear Transcript", "Save Transcript", "Load Transcript" functions
     private JPanel methodsPanel() {
         JPanel mainPanel = new JPanel();
         setLayout(new FlowLayout());
-        AddTool addButton = new AddTool("Add A Course Transcript","./data/audio/addACourse.wav",
+        AddTool addButton = new AddTool("Add A Course","./data/audio/addACourse.wav",
                 this.transcript, this.textArea, textFieldCourseType, textFieldCourseNumber, textFieldGrade,
                 textFieldCredits, null,null);
         mainPanel.add(addButton.createAddFields());
@@ -73,6 +79,7 @@ public class TranscriptApp extends JFrame {
         return mainPanel;
     }
 
+    //EFFECTS: Return a panel with the "Calculate target GPA" and "Remove a Course" functions
     private JPanel oneFieldPanel() {
         JPanel oneFieldPanel = new JPanel();
         TargetTool targetButton = new TargetTool("Calculate target GPA",
@@ -87,6 +94,8 @@ public class TranscriptApp extends JFrame {
         return oneFieldPanel;
     }
 
+    //EFFECTS: Return a panel with the "Calculated Cumulative", "Clear View", "Save Transcript", and "Load Transcript"
+    // functions
     private JPanel buttonsOnlyPanel() {
         JPanel buttonsOnlyPanel = new JPanel();
         CumulativeTool cumulativeButton = new CumulativeTool("Calculate Cumulative",
@@ -181,9 +190,9 @@ public class TranscriptApp extends JFrame {
         } else if (command.equals("r")) {
             doRemove();
         } else if (command.equals("s")) {
-            this.transcript.saveCourses();
+            saveCourses();
         } else if (command.equals("l")) {
-            this.transcript.loadCourses();
+            loadCourses();
         } else if (command.equals("p")) {
             doPrint();
         } else {
@@ -258,4 +267,51 @@ public class TranscriptApp extends JFrame {
             }
         }
     }
+
+    // Saving through the command line
+    // EFFECTS: saves state of transcripts to COURSES_FILE
+    public void saveCourses() {
+        try {
+            Writer writer = new Writer(new File(COURSES_FILE));
+            for (Course c : transcript.getCourseList()) {
+                writer.write(c);
+            }
+            writer.close();
+            System.out.println("Courses saved to file " + COURSES_FILE);
+        } catch (FileNotFoundException e) {
+            System.out.println("Unable to save transcript to " + COURSES_FILE);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            // this is due to a programming error
+        }
+    }
+
+    // Loading through the command line
+    // MODIFIES: this
+    // EFFECTS: loads courses from COURSES_FILE, if that file exists;
+    // otherwise initializes transcript with empty transcript
+    public void loadCourses() {
+        try {
+            List<Course> courses = Reader.readCourses(new File(COURSES_FILE));
+            if (courses.size() == 0) {
+                System.out.println("No past transcript exists. No courses have been loaded.");
+            } else {
+                transcript.getCourseList().clear();
+                for (Course c : courses) {
+                    transcript.addCourse(c);
+                }
+                System.out.println("Courses loaded from " + COURSES_FILE + "\n");
+                int index = 1;
+                System.out.println("Your Transcript \n");
+                for (Course c : transcript.getCourseList()) {
+                    String indexString = (index + ". ");
+                    System.out.println(indexString + c.toString());
+                    index++;
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Unable to load transcript to " + COURSES_FILE);
+        }
+    }
+
 }

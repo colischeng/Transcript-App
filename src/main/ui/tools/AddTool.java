@@ -5,15 +5,19 @@ import model.Transcript;
 
 import javax.swing.*;
 
+//Create a panel for the GUI with fields and a button that can add a course to the transcript
 public class AddTool extends Tool {
 
-
+    //EFFECTS: construct new AddTool object
     public AddTool(String label, String soundLocation, Transcript transcript, JTextArea textArea,
                    JTextField courseType, JTextField courseNumber, JTextField grade, JTextField credits,
                    JTextField target, JTextField remove) {
         super(label, soundLocation, transcript, textArea, courseType, courseNumber, grade, credits, target, remove);
     }
 
+    //MODIFIES: this
+    //EFFECTS: Adds a course to the transcript object based on the fields that have been filled in by the use and then
+    // change the textField
     @Override
     public void doAction(Transcript transcript, JTextArea textArea, JTextField courseType, JTextField courseNumber,
                          JTextField grade, JTextField credits, JTextField target, JTextField remove)  {

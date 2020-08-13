@@ -11,6 +11,7 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 import java.io.File;
 
+//An abstract class that is extended by all the panels (functions) of the GUI
 public abstract class Tool {
     protected String label;
     protected String soundLocation;
@@ -24,6 +25,7 @@ public abstract class Tool {
     protected JTextField target;
     protected JTextField remove;
 
+    //EFFECTS: construct new Tool object
     public Tool(String label, String soundLocation, Transcript transcript, JTextArea textArea, JTextField courseType,
                 JTextField courseNumber, JTextField grade, JTextField credits, JTextField target, JTextField remove) {
         this.label = label;
@@ -46,6 +48,7 @@ public abstract class Tool {
         this.button = button;
     }
 
+    //EFFECTS: Abstraction function that represents the actions taken by a panel
     public abstract void doAction(Transcript transcript, JTextArea textArea, JTextField courseType,
                                   JTextField courseNumber, JTextField grade, JTextField credits, JTextField target,
                                   JTextField remove);
@@ -64,6 +67,7 @@ public abstract class Tool {
         }
     }
 
+    //EFFECTS: return button field
     public JButton getButton() {
         return this.button;
     }
@@ -81,7 +85,7 @@ public abstract class Tool {
         return (title + records);
     }
 
-    //EFFECTS: Abstract method that creates panels that have editable text fields (Add, Target, Remove functionalities)
+    //EFFECTS: Creates panels that have editable text fields (for the Add, Target, Remove functionalities)
     public JPanel questionPanels(String label, String question) {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));

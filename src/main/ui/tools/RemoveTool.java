@@ -4,15 +4,19 @@ import model.Transcript;
 
 import javax.swing.*;
 
+//Create a panel for the GUI with fields and a button that can remove a course from the transcript
 public class RemoveTool extends Tool {
 
-
+    //EFFECTS: construct new RemoveTool object
     public RemoveTool(String label, String soundLocation, Transcript transcript, JTextArea textArea,
                       JTextField courseType, JTextField courseNumber, JTextField grade, JTextField credits,
                       JTextField target, JTextField remove) {
         super(label, soundLocation, transcript, textArea, courseType, courseNumber, grade, credits, target, remove);
     }
 
+    //MODIFIES: this
+    //EFFECTS: Remove a course from the transcript object based on the index that has been filled in by the use and
+    // then change the textField
     @Override
     public void doAction(Transcript transcript, JTextArea textArea, JTextField courseType, JTextField courseNumber,
                          JTextField grade, JTextField credits, JTextField target, JTextField remove) {
@@ -29,6 +33,7 @@ public class RemoveTool extends Tool {
         }
     }
 
+    //EFFECTS: creates the "Remove a course" panel (with fields) for the GUI
     public JPanel createRemovalFields() {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
