@@ -34,8 +34,9 @@ range and clicking the button "Remove Course"
 exception. You must have one test for the case where the exception is expected and another where the exception is not 
 expected.
     - In the **Transcript**  Class, the method **target(int goal)** throws a checked exception called 
-    **UnattainableException** that is well tested in the **TranscriptTest** Class through **targetTestNoException()**
-     and **targetTestThrowsException()** in the **TranscriptTest** class
+    **UnattainableException** that is well tested in the **TranscriptTest** Class through **targetTestNoException()**,
+     **targetTestThrowsExceptionOverOneHundred**, and **targetTestThrowsExceptionLessThanZero** in the
+      **TranscriptTest** class
 
  ## Phase 4: Task 3
 

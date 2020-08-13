@@ -56,9 +56,19 @@ class TranscriptTest {
     }
 
     @Test
-    public void targetTestThrowsException() {
+    public void targetTestThrowsExceptionOverOneHundred() {
         try {
             testTranscript.target(100);
+            fail("Unattainable Exception should have been thrown");
+        } catch (UnattainableException e) {
+            // SUCCESS
+        }
+    }
+
+    @Test
+    public void targetTestThrowsExceptionLessThanZero() {
+        try {
+            testTranscript.target(-99999);
             fail("Unattainable Exception should have been thrown");
         } catch (UnattainableException e) {
             // SUCCESS
