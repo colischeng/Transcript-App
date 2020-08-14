@@ -35,7 +35,7 @@ exception. You must have one test for the case where the exception is expected a
 expected.
     - In the **Transcript**  Class, the method **target(int goal)** throws a checked exception called 
     **UnattainableException** that is well tested in the **TranscriptTest** Class through **targetTestNoException()**,
-     **targetTestThrowsExceptionOverOneHundred**, and **targetTestThrowsExceptionLessThanZero** in the
+     **targetTestThrowsExceptionOverOneHundred()**, and **targetTestThrowsExceptionLessThanZero()** in the
       **TranscriptTest** class
 
  ## Phase 4: Task 3
@@ -54,6 +54,6 @@ to move the logic of these tools into a different class. These panels all share 
 inadvertently created a coupling issue. The original design of my abstract class *Tool* had an association 
 (of multiplicity 1) to the class *Transcript*. However, the *TranscriptApp* class also had an association with 
 *Transcript* as well, meaning that an issue in the *Transcript* class would break both the *TranscriptApp* class and
- *Tool* class (and perhaps any class that extended off this). To fix this coupling issue, I changed *Tool*'s association 
- to *Transcript* to instead be an association to *TranscriptApp* (i.e. *Tool* no longer has a field of type 
+ *Tool* class (and perhaps any class that extended off this). To fix this coupling issue, I changed *Tool*'s 
+ association to *Transcript* to instead be an association to *TranscriptApp* (i.e. *Tool* no longer has a field of type 
  *Transcript*).
