@@ -50,9 +50,10 @@ to move the logic of these tools into a different class. These panels all share 
   class (along with their accompanying fields) from Phase 3, and created the class *AddTool* (that extends the abstract 
   class *Tool* that handles all the functionality of adding courses in the GUI). This was a cohesion improvement, as 
   the *TranscriptApp* class was becoming too cluttered and handling too many functionalities at once.
-- *2. Coupling Improvement*: In creating the abstract class *Tool* to fix the cohesion problem stated earlier, I had
+- *2. Coupling Improvement*: In creating the abstract class *Tool* to fix the cohesion problem stated above, I had
 inadvertently created a coupling issue. The original design of my abstract class *Tool* had an association 
 (of multiplicity 1) to the class *Transcript*. However, the *TranscriptApp* class also had an association with 
 *Transcript* as well, meaning that an issue in the *Transcript* class would break both the *TranscriptApp* class and
  *Tool* class (and perhaps any class that extended off this). To fix this coupling issue, I changed *Tool*'s association 
- to *Transcript* to instead be an association to *TranscriptApp*.
+ to *Transcript* to instead be an association to *TranscriptApp* (i.e. *Tool* no longer has a field of type 
+ *Transcript*).
